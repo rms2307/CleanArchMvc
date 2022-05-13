@@ -4,9 +4,11 @@ using CleanArchMvc.Application.Services;
 using CleanArchMvc.Domain.Interfaces;
 using CleanArchMvc.Infra.Data.Context;
 using CleanArchMvc.Infra.Data.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CleanArchMvc.Infra.IoC
 {
@@ -22,7 +24,15 @@ namespace CleanArchMvc.Infra.IoC
 
             RegisterAutoMapper(services, configuration);
 
+            RegisterMediatR(services);
+
             return services;
+        }
+
+        private static void RegisterMediatR(IServiceCollection services)
+        {
+            var handlers = AppDomain.CurrentDomain.Load("CleanArchMvc.Application");
+            services.AddMediatR(handlers);
         }
 
         private static void RegisterAutoMapper(IServiceCollection services, IConfiguration configuration)
