@@ -1,10 +1,13 @@
 ﻿using CleanArchMvc.Application.Interfaces;
 using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
+using CleanArchMvc.Domain.Account;
 using CleanArchMvc.Domain.Interfaces;
 using CleanArchMvc.Infra.Data.Context;
+using CleanArchMvc.Infra.Data.Identity;
 using CleanArchMvc.Infra.Data.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +29,34 @@ namespace CleanArchMvc.Infra.IoC
 
             RegisterMediatR(services);
 
+            RegisterIdentity(services);
+
+            ConfigureCookie(services);
+
             return services;
+        }
+
+        private static void ConfigureCookie(IServiceCollection services)
+        {
+            //services.ConfigureApplicationCookie(options =>
+            //         options.AccessDeniedPath = "/Account/Login");
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+        }
+
+        private static void RegisterIdentity(IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                            .AddEntityFrameworkStores<ApplicationDbContext>()
+                            .AddDefaultTokenProviders();
         }
 
         private static void RegisterMediatR(IServiceCollection services)
@@ -44,6 +74,9 @@ namespace CleanArchMvc.Infra.IoC
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+
+            services.AddScoped<IAuthenticate, AuthenticateService>();
+            services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
         }
 
         private static void RegisterRepositories(IServiceCollection services, IConfiguration configuration)

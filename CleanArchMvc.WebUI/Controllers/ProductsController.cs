@@ -1,5 +1,6 @@
 ﻿using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,15 +30,16 @@ namespace CleanArchMvc.WebUI.Controllers
             return View(products);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet()]
         public async Task<IActionResult> Create()
         {
-            ViewBag.CategoryId =
-            new SelectList(await _categoryService.GetCategoriesAsync(), "Id", "Name");
+            ViewBag.CategoryId = new SelectList(await _categoryService.GetCategoriesAsync(), "Id", "Name");
 
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(ProductDTO productDto)
         {
@@ -49,7 +51,8 @@ namespace CleanArchMvc.WebUI.Controllers
             return View(productDto);
         }
 
-        [HttpGet()]
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -63,7 +66,8 @@ namespace CleanArchMvc.WebUI.Controllers
             return View(productDto);
         }
 
-        [HttpPost()]
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
         public async Task<IActionResult> Edit(ProductDTO productDto)
         {
             if (ModelState.IsValid)
@@ -74,7 +78,8 @@ namespace CleanArchMvc.WebUI.Controllers
             return View(productDto);
         }
 
-        [HttpGet()]
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -87,13 +92,15 @@ namespace CleanArchMvc.WebUI.Controllers
             return View(productDto);
         }
 
-        [HttpPost(), ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _productService.RemoveAsync(id);
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
