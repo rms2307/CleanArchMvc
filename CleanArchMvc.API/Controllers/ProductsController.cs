@@ -1,5 +1,6 @@
 ﻿using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
         {
             var produtos = await _productService.GetProductsAsync();
@@ -27,6 +29,7 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
+        [Authorize]
         public async Task<ActionResult<ProductDTO>> Get(int id)
         {
             var produto = await _productService.GetByIdAsync(id);
@@ -37,6 +40,7 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Post([FromBody] ProductDTO produtoDto)
         {
             if (produtoDto == null)
@@ -49,6 +53,7 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Put(int id, [FromBody] ProductDTO produtoDto)
         {
             if (id != produtoDto.Id)
@@ -63,6 +68,7 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductDTO>> Delete(int id)
         {
             var produtoDto = await _productService.GetByIdAsync(id);
