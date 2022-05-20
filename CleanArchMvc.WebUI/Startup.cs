@@ -1,4 +1,4 @@
-using CleanArchMvc.Domain.Account;
+using CleanArchMvc.Domain.Interfaces.Account;
 using CleanArchMvc.Infra.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

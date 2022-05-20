@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CleanArchMvc.Domain.Interfaces
+namespace CleanArchMvc.Domain.Interfaces.Repository
 {
     public interface IProductRepository
     {

@@ -1,8 +1,8 @@
 ﻿using CleanArchMvc.Application.Interfaces;
 using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
-using CleanArchMvc.Domain.Account;
-using CleanArchMvc.Domain.Interfaces;
+using CleanArchMvc.Domain.Interfaces.Account;
+using CleanArchMvc.Domain.Interfaces.Repository;
 using CleanArchMvc.Infra.Data.Context;
 using CleanArchMvc.Infra.Data.Identity;
 using CleanArchMvc.Infra.Data.Repositories;
@@ -38,9 +38,6 @@ namespace CleanArchMvc.Infra.IoC
 
         private static void ConfigureCookie(IServiceCollection services)
         {
-            //services.ConfigureApplicationCookie(options =>
-            //         options.AccessDeniedPath = "/Account/Login");
-
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;

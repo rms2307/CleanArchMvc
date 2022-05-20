@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Domain.Account;
+﻿using CleanArchMvc.Domain.Interfaces.Account;
 using Microsoft.AspNetCore.Identity;
 using System;
 
@@ -60,9 +60,7 @@ namespace CleanArchMvc.Infra.Data.Identity
                 IdentityResult result = _userManager.CreateAsync(user, password).Result;
 
                 if (result.Succeeded)
-                {
-                    _userManager.AddToRoleAsync(user, role).Wait();
-                }
+                    _userManager.AddToRoleAsync(user, role).Wait();                
             }
         }
     }

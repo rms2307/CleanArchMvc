@@ -1,4 +1,4 @@
-﻿namespace CleanArchMvc.Domain.Account
+﻿namespace CleanArchMvc.Domain.Interfaces.Account
 {
     public interface ISeedUserRoleInitial
     {
