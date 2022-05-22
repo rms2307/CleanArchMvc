@@ -49,7 +49,7 @@ namespace CleanArchMvc.API.Controllers
             return new CreatedAtRouteResult("GetCategory", new { id = categoryDto.Id }, categoryDto);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] CategoryDTO categoryDto)
         {
             if (id != categoryDto.Id)

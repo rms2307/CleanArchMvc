@@ -1,13 +1,20 @@
 ﻿using CleanArchMvc.Domain.Entities;
+using CleanArchMvc.Domain.Interfaces.Account;
 using CleanArchMvc.Infra.Data.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace CleanArchMvc.Infra.Data.Context
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        private readonly ICurrentUser _currentUser;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+            ICurrentUser currentUser) : base(options)
+        {
+            _currentUser = currentUser;
+        }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -16,6 +23,31 @@ namespace CleanArchMvc.Infra.Data.Context
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        }
+
+        public override int SaveChanges()
+        {
+            SignChanges();
+            return base.SaveChanges();
+        }
+
+        public void SignChanges()
+        {
+            var entries = ChangeTracker.Entries();
+
+            foreach (var entry in entries)
+            {
+                if (entry.Entity is ISignedChanges signedChangesEntity)
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Modified:
+                        case EntityState.Added:
+                            signedChangesEntity.SignChanges(_currentUser?.Email);
+                            break;
+                    }
+                }
+            }
         }
     }
 }

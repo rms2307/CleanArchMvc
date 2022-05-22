@@ -54,11 +54,14 @@ namespace CleanArchMvc.Infra.IoC
 
         private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICurrentUser, CurrentUser>();
 
-            services.AddScoped<IAuthenticate, AuthenticateService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();            
+
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
+            services.AddScoped<ITokenService, TokenService>();
         }
 
         private static void RegisterRepositories(IServiceCollection services, IConfiguration configuration)

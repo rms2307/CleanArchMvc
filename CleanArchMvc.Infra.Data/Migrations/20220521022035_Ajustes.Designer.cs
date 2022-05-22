@@ -3,15 +3,17 @@ using System;
 using CleanArchMvc.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CleanArchMvc.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220521022035_Ajustes")]
+    partial class Ajustes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,12 +81,6 @@ namespace CleanArchMvc.Infra.Data.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("text");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ModifiedWhen")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()

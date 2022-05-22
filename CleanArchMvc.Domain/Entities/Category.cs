@@ -1,18 +1,25 @@
-﻿using CleanArchMvc.Domain.Validation;
+﻿using CleanArchMvc.Domain.Interfaces.Account;
+using CleanArchMvc.Domain.Validation;
+using System;
 using System.Collections.Generic;
 
 namespace CleanArchMvc.Domain.Entities
 {
-    public sealed class Category : BaseEntity
+    public sealed class Category : BaseEntity, ISignedChanges
     {
         public string Name { get; private set; }
 
         public ICollection<Product> Products { get; set; }
 
+        public DateTime ModifiedWhen { get; set; }
+
+        public string ModifiedBy { get; set; }
+
         public Category(int id, string name)
         {
             DomainExceptionValidation.When(id < 0, "Invalid Id value!");
             Id = id;
+
             ValidateDomain(name);
         }
 
@@ -35,6 +42,12 @@ namespace CleanArchMvc.Domain.Entities
                 "Invalid name. Minimum 3 charecters!");
 
             Name = name;
+        }
+
+        public void SignChanges(string username)
+        {
+            ModifiedBy = username;
+            ModifiedWhen = DateTime.Now;
         }
     }
 }

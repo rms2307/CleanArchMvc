@@ -11,21 +11,27 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
     public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, Product>
     {
         private readonly IProductRepository _productRepository;
-        public ProductCreateCommandHandler(IProductRepository productRepository)
+        private readonly ICategoryRepository _categoryRepository;
+
+        public ProductCreateCommandHandler(IProductRepository productRepository, 
+            ICategoryRepository categoryRepository)
         {
-            _productRepository = productRepository ??
-                throw new ArgumentNullException(nameof(productRepository));
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<Product> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
         {
             var product = new Product(
-                request.Name, request.Description, request.Price, request.Stock, request.Image);
+                request.Name, request.Description, request.Price, request.Stock, request.Image, request.CategoryId);
 
             if (product is null)
                 throw new ApplicationException($"Error creating entity");
 
-            product.CategoryId = request.CategoryId;
+            var category = await _categoryRepository.GetCategoryByIdAsync(request.CategoryId);
+            if (category is null)
+                throw new ApplicationException($"The category don't exist.");
+
             return await _productRepository.CreateAsync(product);
         }
     }

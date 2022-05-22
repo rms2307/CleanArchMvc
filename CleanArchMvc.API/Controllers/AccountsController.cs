@@ -1,13 +1,12 @@
 ﻿using CleanArchMvc.API.DTOs.Account;
-using CleanArchMvc.Domain.Account;
+using CleanArchMvc.Application.Interfaces;
+using CleanArchMvc.Domain.Interfaces.Account;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CleanArchMvc.API.Controllers
@@ -16,77 +15,78 @@ namespace CleanArchMvc.API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly IAuthenticate _authentication;
+        private readonly IAccountService _accountService;
+        private readonly ITokenService _tokenService;
         private readonly IConfiguration _configuration;
 
-        public AccountsController(IAuthenticate authentication, IConfiguration configuration)
+        public AccountsController(IAccountService accountService, ITokenService tokenService, IConfiguration configuration)
         {
-            _authentication = authentication ??
-                throw new ArgumentNullException(nameof(authentication));
-            _configuration = configuration ??
-                throw new ArgumentNullException(nameof(configuration));
+            _accountService = accountService;
+            _tokenService = tokenService;
+            _configuration = configuration;
         }
 
         [HttpPost("Login")]
+        [SwaggerOperation(
+            Summary = "Endpoint responsável pelo login do usuário."
+        )]
+        [ProducesResponseType(typeof(UserTokenDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserTokenDTO>> Login([FromBody] LoginDTO login)
         {
-            var result = await _authentication.Authenticate(login.Email, login.Password);
+            var result = await _accountService.Authenticate(login.Email, login.Password);
 
             if (result)
-                return GenerateToken(login);
+            {
+                var userToken = new UserTokenDTO
+                {
+                    Token = await _tokenService.GetTokenAsync(login.Email),
+                    Expiration = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["Jwt:Expires"]))
+                };
+
+                return Ok(userToken);
+            }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return BadRequest(ModelState);
         }
 
         [HttpPost("CreateUser")]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        [Authorize]
-        public async Task<ActionResult> CreateUser([FromBody] LoginDTO login)
+        [SwaggerOperation(
+            Summary = "Endpoint responsável por registrar um usuário."
+        )]
+        public async Task<ActionResult> CreateUser([FromBody] RegisterUserDTO userDTO)
         {
-            var result = await _authentication.RegisterUser(login.Email, login.Password);
+            var result = await _accountService.RegisterUser(userDTO.Email, userDTO.Password);
 
             if (result)
-            {
-                return Ok($"User {login.Email} was created successfully");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Login attempt.");
-                return BadRequest(ModelState);
-            }
+                return Ok($"User {userDTO.Email} was created successfully");
+
+            ModelState.AddModelError(string.Empty, "Invalid create user attempt.");
+            return BadRequest(ModelState);
         }
 
-        private UserTokenDTO GenerateToken(LoginDTO login)
+        [HttpPost("AdminCreateUser")]
+        [SwaggerOperation(
+            Summary = "Endpoint para um usuário com a role Admin registrar outros usuários"
+        )]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> AdminCreateUser([FromBody] AdminRegisterUserDTO userDTO)
         {
-            var claims = new[]
+            try
             {
-                new Claim(JwtRegisteredClaimNames.Email, login.Email),
-                new Claim(JwtRegisteredClaimNames.Email, login.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+                var result = await _accountService.RegisterUser(userDTO.Email, userDTO.Password, userDTO.Role);
 
-            var privateKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
+                if (result)
+                    return Ok($"User {userDTO.Email} was created successfully");
 
-            var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256);
-
-            var expiration = DateTime.UtcNow.AddMinutes(10);
-
-            JwtSecurityToken token = new
-                (
-                    issuer: _configuration["Jwt:Issuer"],
-                    audience: _configuration["Jwt:Audience"],
-                    claims: claims,
-                    expires: expiration,
-                    signingCredentials: credentials
-                );
-
-            return new UserTokenDTO()
+                ModelState.AddModelError(string.Empty, "Invalid create user attempt.");
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
-            };
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return BadRequest(ModelState);
+            }
         }
     }
 }

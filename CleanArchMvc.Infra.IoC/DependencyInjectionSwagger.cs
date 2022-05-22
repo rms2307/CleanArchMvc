@@ -36,6 +36,7 @@ namespace CleanArchMvc.Infra.IoC
                             new string[] {}
                     }
                 });
+                c.EnableAnnotations();
             });
 
             return services;

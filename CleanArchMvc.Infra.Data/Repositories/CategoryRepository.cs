@@ -29,21 +29,21 @@ namespace CleanArchMvc.Infra.Data.Repositories
         public async Task<Category> CreateAsync(Category category)
         {
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return category;
         }
 
         public async Task<Category> UpdateAsync(Category category)
         {
             _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return category;
         }
 
         public async Task<Category> RemoveAsync(Category category)
         {
             _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return category;
         }
     }

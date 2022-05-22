@@ -72,7 +72,7 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
 
-            services.AddScoped<IAuthenticate, AuthenticateService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
         }
 
