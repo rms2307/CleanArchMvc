@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace CleanArchMvc.Infrastructure.Identity
 {
-    public class AccountService : IAccountService
+    public class IdentityService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public AccountService(UserManager<ApplicationUser> userManager,
+        public IdentityService(UserManager<ApplicationUser> userManager,
                 SignInManager<ApplicationUser> signInManager,
                 IHttpContextAccessor httpContextAccessor)
         {
@@ -24,7 +24,8 @@ namespace CleanArchMvc.Infrastructure.Identity
 
         public async Task<bool> Authenticate(string email, string password)
         {
-            var result = await _signInManager.PasswordSignInAsync(email, password, false, false);
+            var userName = email.Split("@")[0];
+            var result = await _signInManager.PasswordSignInAsync(userName, password, false, false);
             return result.Succeeded;
         }
 

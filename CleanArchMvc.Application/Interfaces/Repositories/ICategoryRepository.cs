@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CleanArchMvc.Domain.Interfaces.Repository
+namespace CleanArchMvc.Application.Interfaces.Repositories
 {
     public interface ICategoryRepository
     {

@@ -1,7 +1,9 @@
 ﻿using CleanArchMvc.Application.DTOs;
-using CleanArchMvc.Application.Interfaces;
+using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -50,6 +52,28 @@ namespace CleanArchMvc.API.Controllers
 
             return new CreatedAtRouteResult("GetProduct",
                 new { id = produtoDto.Id }, produtoDto);
+        }
+
+        [HttpPost("UploadFile")]
+        //[Authorize(Roles = "Admin")]
+        [SwaggerOperation(
+            Summary = "Endpoint responsável pelo upload do arquivo de produtos (.xlxs)."
+        )]
+        [ProducesResponseType(typeof(FormFileDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UploadFile([FromForm] IFormFile file)
+        {
+            var fileDTO = new FormFileDTO
+            {
+                Name = file.Name,
+                FileName = file.FileName,
+                ContentDisposition = file.ContentDisposition,
+                ContentType = file.ContentType,
+                Length = file.Length
+            };
+
+            await _productService.UploadFileAsync(fileDTO);
+
+            return Ok(fileDTO);
         }
 
         [HttpPut("{id}")]

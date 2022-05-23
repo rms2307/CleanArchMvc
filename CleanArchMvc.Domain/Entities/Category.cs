@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Domain.Interfaces.Account;
+﻿using CleanArchMvc.Domain.Interfaces;
 using CleanArchMvc.Domain.Validation;
 using System;
 using System.Collections.Generic;

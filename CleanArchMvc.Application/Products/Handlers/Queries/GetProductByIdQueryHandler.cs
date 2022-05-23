@@ -1,6 +1,6 @@
-﻿using CleanArchMvc.Application.Products.Queries;
+﻿using CleanArchMvc.Application.Interfaces.Repositories;
+using CleanArchMvc.Application.Products.Queries;
 using CleanArchMvc.Domain.Entities;
-using CleanArchMvc.Domain.Interfaces.Repository;
 using MediatR;
 using System;
 using System.Threading;

@@ -1,8 +1,8 @@
-﻿using CleanArchMvc.Application.Interfaces;
+﻿using CleanArchMvc.Application.Interfaces.Repositories;
+using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
 using CleanArchMvc.Domain.Interfaces.Account;
-using CleanArchMvc.Domain.Interfaces.Repository;
 using CleanArchMvc.Infrastructure;
 using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;
@@ -72,7 +72,7 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
 
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountService, IdentityService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
         }
 

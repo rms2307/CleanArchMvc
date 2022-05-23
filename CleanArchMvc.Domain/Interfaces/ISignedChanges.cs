@@ -1,6 +1,6 @@
 ﻿    using System;
 
-namespace CleanArchMvc.Domain.Interfaces.Account
+namespace CleanArchMvc.Domain.Interfaces
 {
     public interface ISignedChanges
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchMvc.Application.DTOs;
-using CleanArchMvc.Application.Interfaces;
+using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Products.Commands;
 using CleanArchMvc.Application.Products.Queries;
 using MediatR;
@@ -47,6 +47,11 @@ namespace CleanArchMvc.Application.Services
         public async Task RemoveAsync(int? id)
         {
             await _mediator.Send(new ProductRemoveCommand(id.Value));
+        }
+
+        public async Task UploadFileAsync(FormFileDTO fileDTO)
+        {
+
         }
     }
 }

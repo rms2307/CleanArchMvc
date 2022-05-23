@@ -1,5 +1,5 @@
-﻿using CleanArchMvc.Domain.Entities;
-using CleanArchMvc.Domain.Interfaces.Repository;
+﻿using CleanArchMvc.Application.Interfaces.Repositories;
+using CleanArchMvc.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
