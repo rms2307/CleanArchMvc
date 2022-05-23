@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.Application", 
 		{3DC4BCFA-5B9F-4F88-AC6F-800DA81A1B68} = {3DC4BCFA-5B9F-4F88-AC6F-800DA81A1B68}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.Infra.Data", "CleanArchMvc.Infra.Data\CleanArchMvc.Infra.Data.csproj", "{3522369D-BBFC-436C-90A6-E2E6EBB83B41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.Infrastructure", "CleanArchMvc.Infra.Data\CleanArchMvc.Infrastructure.csproj", "{3522369D-BBFC-436C-90A6-E2E6EBB83B41}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.Infra.IoC", "CleanArchMvc.Infra.IoC\CleanArchMvc.Infra.IoC.csproj", "{40F4DADD-837A-4CCE-83E3-B7ECC7F431BC}"
 EndProject
@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.WebUI", "Clean
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.Domain.Tests", "CleanArchMvc.Domain.Tests\CleanArchMvc.Domain.Tests.csproj", "{4E35B8FE-8E58-41B9-AAD7-4CAF332BBCCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchMvc.API", "CleanArchMvc.API\CleanArchMvc.API.csproj", "{1FE65FBC-027B-437E-8AF7-D6E7DE7ECB57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchMvc.API", "CleanArchMvc.API\CleanArchMvc.API.csproj", "{1FE65FBC-027B-437E-8AF7-D6E7DE7ECB57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,10 @@
 ﻿using CleanArchMvc.Domain.Entities;
 using CleanArchMvc.Domain.Interfaces.Account;
-using CleanArchMvc.Infra.Data.Identity;
+using CleanArchMvc.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
-namespace CleanArchMvc.Infra.Data.Context
+namespace CleanArchMvc.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

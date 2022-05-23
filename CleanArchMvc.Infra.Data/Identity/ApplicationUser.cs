@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CleanArchMvc.Infra.Data.Identity
+namespace CleanArchMvc.Infrastructure.Identity
 {
     public class ApplicationUser : IdentityUser { }
 }

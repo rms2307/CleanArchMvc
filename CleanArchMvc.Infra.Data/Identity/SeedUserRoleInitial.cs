@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace CleanArchMvc.Infra.Data.Identity
+namespace CleanArchMvc.Infrastructure.Identity
 {
     public class SeedUserRoleInitial : ISeedUserRoleInitial
     {

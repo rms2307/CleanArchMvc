@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CleanArchMvc.Infra.Data.Migrations
+namespace CleanArchMvc.Infrastructure.Migrations
 {
     public partial class SeedProduct : Migration
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
-namespace CleanArchMvc.Infra.Data.Identity
+namespace CleanArchMvc.Infrastructure.Identity
 {
     public class AccountService : IAccountService
     {

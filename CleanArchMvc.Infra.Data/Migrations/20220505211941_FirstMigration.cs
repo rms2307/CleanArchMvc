@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace CleanArchMvc.Infra.Data.Migrations
+namespace CleanArchMvc.Infrastructure.Migrations
 {
     public partial class FirstMigration : Migration
     {

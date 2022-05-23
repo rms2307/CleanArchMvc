@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchMvc.Infra.Data.EntitiesConfiguration
+namespace CleanArchMvc.Infrastructure.EntitiesConfiguration
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

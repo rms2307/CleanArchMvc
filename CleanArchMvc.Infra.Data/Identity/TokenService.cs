@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchMvc.Infra.Data.Identity
+namespace CleanArchMvc.Infrastructure.Identity
 {
     public class TokenService : ITokenService
     {

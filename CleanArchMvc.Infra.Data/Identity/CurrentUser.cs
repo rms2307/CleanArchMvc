@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 
-namespace CleanArchMvc.Infra.Data.Identity
+namespace CleanArchMvc.Infrastructure.Identity
 {
     public class CurrentUser : ICurrentUser
     {
