@@ -1,6 +1,5 @@
 ﻿using CleanArchMvc.API.DTOs.Account;
-using CleanArchMvc.Application.Interfaces;
-using CleanArchMvc.Domain.Interfaces.Account;
+using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

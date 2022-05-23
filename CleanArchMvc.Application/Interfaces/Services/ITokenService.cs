@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CleanArchMvc.Application.Interfaces
+namespace CleanArchMvc.Application.Interfaces.Services
 {
     public interface ITokenService
     {

@@ -1,5 +1,5 @@
 ﻿using CleanArchMvc.Application.DTOs;
-using CleanArchMvc.Application.Interfaces;
+using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

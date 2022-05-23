@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Application.Interfaces;
+﻿using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

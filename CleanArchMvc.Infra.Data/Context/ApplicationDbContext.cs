@@ -1,6 +1,6 @@
-﻿using CleanArchMvc.Domain.Entities;
+﻿using CleanArchMvc.Application.Interfaces.Services;
+using CleanArchMvc.Domain.Entities;
 using CleanArchMvc.Domain.Interfaces;
-using CleanArchMvc.Domain.Interfaces.Account;
 using CleanArchMvc.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

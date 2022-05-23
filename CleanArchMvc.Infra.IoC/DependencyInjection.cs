@@ -2,7 +2,6 @@
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
-using CleanArchMvc.Domain.Interfaces.Account;
 using CleanArchMvc.Infrastructure;
 using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;

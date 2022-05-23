@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Domain.Interfaces.Account;
+﻿using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
