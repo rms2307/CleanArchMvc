@@ -10,6 +10,7 @@ namespace CleanArchMvc.Application.Interfaces.Repositories
         Task<Product> GetProductByIdAsync(int? id);
 
         Task<Product> CreateAsync(Product product);
+        Task<List<Product>> CreateAsync(List<Product> products);
         Task<Product> UpdateAsync(Product product);
         Task<Product> RemoveAsync(Product product);
     }

@@ -3,6 +3,7 @@ using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
 using CleanArchMvc.Infrastructure;
+using CleanArchMvc.Infrastructure.Files;
 using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;
 using MediatR;
@@ -49,6 +50,7 @@ namespace CleanArchMvc.Infra.IoC
         private static void RegisterAutoMapper(IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            services.AddAutoMapper(typeof(DTOToCommandMappingProfile));
         }
 
         private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
@@ -61,6 +63,7 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<IAccountService, IdentityService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IFileService, ExcelReader>();
         }
 
         private static void RegisterRepositories(IServiceCollection services, IConfiguration configuration)

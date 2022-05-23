@@ -1,9 +1,11 @@
 ﻿using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.Interfaces.Services;
+using CleanArchMvc.Domain.VOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -54,26 +56,33 @@ namespace CleanArchMvc.API.Controllers
                 new { id = produtoDto.Id }, produtoDto);
         }
 
-        [HttpPost("UploadFile")]
-        //[Authorize(Roles = "Admin")]
+        [HttpPost("UploadListProducts")]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(
-            Summary = "Endpoint responsável pelo upload do arquivo de produtos (.xlxs)."
+            Summary = "Endpoint responsável pelo upload do arquivo de produtos."
         )]
-        [ProducesResponseType(typeof(FormFileDTO), StatusCodes.Status200OK)]
-        public async Task<ActionResult> UploadFile([FromForm] IFormFile file)
+        [ProducesResponseType(typeof(Domain.VOs.FormFile), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UploadListProducts([FromForm] IFormFile file)
         {
-            var fileDTO = new FormFileDTO
+            try
             {
-                Name = file.Name,
-                FileName = file.FileName,
-                ContentDisposition = file.ContentDisposition,
-                ContentType = file.ContentType,
-                Length = file.Length
-            };
+                Domain.VOs.FormFile formFile = new(
+                    file.OpenReadStream(),
+                    file.Name,
+                    file.FileName,
+                    file.Length,
+                    file.ContentType
+                    );
 
-            await _productService.UploadFileAsync(fileDTO);
+                await _productService.UploadListProductsAsync(formFile);
 
-            return Ok(fileDTO);
+                return Created(string.Empty, null);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Errors", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpPut("{id}")]

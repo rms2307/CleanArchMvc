@@ -4,6 +4,7 @@ using CleanArchMvc.Domain.Interfaces;
 using CleanArchMvc.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace CleanArchMvc.Infrastructure
 {
@@ -27,6 +28,8 @@ namespace CleanArchMvc.Infrastructure
 
         public override int SaveChanges()
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             SignChanges();
             return base.SaveChanges();
         }

@@ -3,6 +3,7 @@ using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Products.Commands;
 using CleanArchMvc.Application.Products.Queries;
+using CleanArchMvc.Domain.VOs;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -49,9 +50,9 @@ namespace CleanArchMvc.Application.Services
             await _mediator.Send(new ProductRemoveCommand(id.Value));
         }
 
-        public async Task UploadFileAsync(FormFileDTO fileDTO)
+        public async Task UploadListProductsAsync(FormFile file)
         {
-
+            await _mediator.Send(new ProductUploadListProductsCommand(file));
         }
     }
 }

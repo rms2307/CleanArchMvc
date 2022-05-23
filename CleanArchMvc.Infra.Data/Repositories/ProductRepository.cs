@@ -22,6 +22,13 @@ namespace CleanArchMvc.Infrastructure.Repositories
             return product;
         }
 
+        public async Task<List<Product>> CreateAsync(List<Product> products)
+        {
+            _context.Products.AddRange(products);
+            _context.SaveChanges();
+            return products;
+        }
+
         public async Task<Product> GetProductByIdAsync(int? id)
         {
             return await _context.Products.Include(x => x.Category)
