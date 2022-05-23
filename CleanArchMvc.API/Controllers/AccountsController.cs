@@ -46,7 +46,7 @@ namespace CleanArchMvc.API.Controllers
                 return Ok(userToken);
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            ModelState.AddModelError("Errors", "Invalid login attempt.");
             return BadRequest(ModelState);
         }
 
@@ -61,7 +61,7 @@ namespace CleanArchMvc.API.Controllers
             if (result)
                 return Ok($"User {userDTO.Email} was created successfully");
 
-            ModelState.AddModelError(string.Empty, "Invalid create user attempt.");
+            ModelState.AddModelError("Errors", "Invalid create user attempt.");
             return BadRequest(ModelState);
         }
 
@@ -79,12 +79,12 @@ namespace CleanArchMvc.API.Controllers
                 if (result)
                     return Ok($"User {userDTO.Email} was created successfully");
 
-                ModelState.AddModelError(string.Empty, "Invalid create user attempt.");
+                ModelState.AddModelError("Errors", "Invalid create user attempt.");
                 return BadRequest(ModelState);
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                ModelState.AddModelError("Errors", ex.Message);
                 return BadRequest(ModelState);
             }
         }

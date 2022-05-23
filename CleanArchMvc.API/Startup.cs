@@ -1,3 +1,4 @@
+using CleanArchMvc.API.Middleware;
 using CleanArchMvc.Infra.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,7 @@ namespace CleanArchMvc.API
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseStatusCodePages();
             app.UseRouting();
             app.UseAuthentication();
