@@ -59,7 +59,7 @@ namespace CleanArchMvc.API.Controllers
         [HttpPost("UploadListProducts")]
         [Authorize(Roles = "Admin")]
         [SwaggerOperation(
-            Summary = "Endpoint responsável pelo upload do arquivo de produtos."
+            Summary = "Endpoint responsável pelo upload do arquivo com a lista de produtos."
         )]
         [ProducesResponseType(typeof(Domain.VOs.FormFile), StatusCodes.Status200OK)]
         public async Task<ActionResult> UploadListProducts([FromForm] IFormFile file)

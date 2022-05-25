@@ -58,11 +58,12 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<ICurrentUser, CurrentUser>();
 
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IProductService, ProductService>();            
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IAccountService, IdentityService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
             services.AddScoped<ITokenService, TokenService>();
+            //services.AddScoped<IFileService, CSVReader>();
             services.AddScoped<IFileService, ExcelReader>();
         }
 

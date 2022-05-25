@@ -1,5 +1,4 @@
-﻿using CleanArchMvc.Application.DTOs;
-using CleanArchMvc.Application.Interfaces.Services;
+﻿using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Domain.Entities;
 using CleanArchMvc.Domain.VOs;
 using ExcelDataReader;
