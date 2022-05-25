@@ -5,6 +5,8 @@ using CleanArchMvc.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CleanArchMvc.Infrastructure
 {
@@ -32,6 +34,14 @@ namespace CleanArchMvc.Infrastructure
 
             SignChanges();
             return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+            SignChanges();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         public void SignChanges()

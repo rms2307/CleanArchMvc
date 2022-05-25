@@ -18,14 +18,14 @@ namespace CleanArchMvc.Infrastructure.Repositories
         public async Task<Product> CreateAsync(Product product)
         {
             _context.Products.Add(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return product;
         }
 
         public async Task<List<Product>> CreateAsync(List<Product> products)
         {
             _context.Products.AddRange(products);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return products;
         }
 
@@ -50,7 +50,7 @@ namespace CleanArchMvc.Infrastructure.Repositories
         public async Task<Product> UpdateAsync(Product product)
         {
             _context.Products.Update(product);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return product;
         }
     }
