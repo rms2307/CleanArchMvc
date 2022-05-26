@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CleanArchMvc.Application.Exceptions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CleanArchMvc.API.Middleware
@@ -26,16 +28,75 @@ namespace CleanArchMvc.API.Middleware
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
-        {
-            context.Response.ContentType = "application/json";
+        //private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        //{
+        //    context.Response.ContentType = "application/json";
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(new
+        //    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //    await context.Response.WriteAsync(new
+        //    {
+        //        StatusCode = context.Response.StatusCode,
+        //        Message = exception.Message
+        //    }.ToString());
+        //}
+
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            var response = new InternalServerErrorException(GetGenericStatusCodeMessage(exception));
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = GetStatusCode(exception);
+            return context.Response.WriteAsync(JsonSerializer.Serialize(new { response.Message },
+                new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true,
+                }));
+        }
+
+        private static int GetStatusCode(Exception ex)
+        {
+            switch (ex)
             {
-                StatusCode = context.Response.StatusCode,
-                Message = exception.Message
-            }.ToString());
+                case BadRequestException _:
+                    return (int)HttpStatusCode.BadRequest;
+                case NotFoundException _:
+                    return (int)HttpStatusCode.NotFound;
+                case UnauthorizedException _:
+                    return (int)HttpStatusCode.Unauthorized;
+                case ForbiddenException _:
+                    return (int)HttpStatusCode.Forbidden;
+                case ServiceUnavailableException _:
+                    return (int)HttpStatusCode.ServiceUnavailable;
+                case InternalServerErrorException _:
+                    return (int)HttpStatusCode.InternalServerError;
+                case StatusCodeException _:
+                    return GetGenericStatusCode(ex.Message);
+                default:
+                    return (int)HttpStatusCode.InternalServerError;
+            }
+        }
+
+        private static int GetGenericStatusCode(string exMessage)
+        {
+            var croped = CropStatusCodeFromMessage(exMessage).Trim();
+            croped = croped.Replace("_$!_", string.Empty);
+
+            return int.Parse(croped);
+        }
+
+        private static string GetGenericStatusCodeMessage(Exception exception)
+        {
+            if (exception.GetBaseException().GetType() != typeof(StatusCodeException))
+                return exception.Message;
+
+            var newMessage = CropStatusCodeFromMessage(exception.Message);
+            return exception.Message.Replace(newMessage, string.Empty).Trim();
+
+        }
+
+        private static string CropStatusCodeFromMessage(string message)
+        {
+            return message.Substring(0, 12);
         }
     }
 }
