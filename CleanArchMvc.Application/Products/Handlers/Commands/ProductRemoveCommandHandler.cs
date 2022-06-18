@@ -1,4 +1,5 @@
-﻿using CleanArchMvc.Application.Interfaces.Repositories;
+﻿using CleanArchMvc.Application.Exceptions;
+using CleanArchMvc.Application.Interfaces.Repositories;
 using CleanArchMvc.Application.Products.Commands;
 using CleanArchMvc.Domain.Entities;
 using MediatR;
@@ -22,7 +23,7 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
             var product = await _productRepository.GetProductByIdAsync(request.Id);
 
             if (product is null)
-                throw new ApplicationException($"Entity could not be found");
+                throw new NotFoundException($"Entity could not be found");
 
             return await _productRepository.RemoveAsync(product);
         }

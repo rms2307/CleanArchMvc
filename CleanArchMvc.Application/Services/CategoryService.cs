@@ -27,8 +27,8 @@ namespace CleanArchMvc.Application.Services
 
         public async Task<CategoryDTO> GetByIdAsync(int? id)
         {
-            var categories = await _repository.GetCategoryByIdAsync(id);
-            return _mapper.Map<CategoryDTO>(categories);
+            var category = await _repository.GetCategoryByIdAsync(id);
+            return _mapper.Map<CategoryDTO>(category);
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetCategoriesAsync()

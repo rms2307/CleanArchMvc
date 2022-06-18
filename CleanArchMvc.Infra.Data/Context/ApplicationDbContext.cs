@@ -28,18 +28,8 @@ namespace CleanArchMvc.Infrastructure
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
 
-        public override int SaveChanges()
-        {
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-            SignChanges();
-            return base.SaveChanges();
-        }
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
             SignChanges();
             return await base.SaveChangesAsync(cancellationToken);
         }
