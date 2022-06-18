@@ -1,5 +1,6 @@
 ﻿using CleanArchMvc.API.DTOs.Account;
 using CleanArchMvc.Application.Interfaces.Services;
+using CleanArchMvc.Domain.VOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,24 +30,12 @@ namespace CleanArchMvc.API.Controllers
         [SwaggerOperation(
             Summary = "Endpoint responsável pelo login do usuário."
         )]
-        [ProducesResponseType(typeof(UserTokenDTO), StatusCodes.Status200OK)]
-        public async Task<ActionResult<UserTokenDTO>> Login([FromBody] LoginDTO login)
+        [ProducesResponseType(typeof(UserToken), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserToken>> Login([FromBody] LoginDTO login)
         {
-            var result = await _accountService.Authenticate(login.Email, login.Password);
+            await _accountService.Authenticate(login.Email, login.Password);
 
-            if (result)
-            {
-                var userToken = new UserTokenDTO
-                {
-                    Token = await _tokenService.GetTokenAsync(login.Email),
-                    Expiration = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["Jwt:Expires"]))
-                };
-
-                return Ok(userToken);
-            }
-
-            ModelState.AddModelError("Errors", "Invalid login attempt.");
-            return BadRequest(ModelState);
+            return Ok(await _tokenService.GetTokenAsync(login.Email));
         }
 
         [HttpPost("CreateUser")]
@@ -55,13 +44,9 @@ namespace CleanArchMvc.API.Controllers
         )]
         public async Task<ActionResult> CreateUser([FromBody] RegisterUserDTO userDTO)
         {
-            var result = await _accountService.RegisterUser(userDTO.Email, userDTO.Password);
+            await _accountService.RegisterUser(userDTO.Email, userDTO.Password);
 
-            if (result)
-                return Ok($"User {userDTO.Email} was created successfully");
-
-            ModelState.AddModelError("Errors", "Invalid create user attempt.");
-            return BadRequest(ModelState);
+            return Created(string.Empty, userDTO);
         }
 
         [HttpPost("AdminCreateUser")]
@@ -71,21 +56,9 @@ namespace CleanArchMvc.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AdminCreateUser([FromBody] AdminRegisterUserDTO userDTO)
         {
-            try
-            {
-                var result = await _accountService.RegisterUser(userDTO.Email, userDTO.Password, userDTO.Role);
+            await _accountService.RegisterUser(userDTO.Email, userDTO.Password, userDTO.Role);
 
-                if (result)
-                    return Ok($"User {userDTO.Email} was created successfully");
-
-                ModelState.AddModelError("Errors", "Invalid create user attempt.");
-                return BadRequest(ModelState);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Errors", ex.Message);
-                return BadRequest(ModelState);
-            }
+            return Created(string.Empty, userDTO);
         }
     }
 }

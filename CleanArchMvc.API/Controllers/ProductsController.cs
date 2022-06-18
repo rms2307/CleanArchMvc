@@ -47,13 +47,9 @@ namespace CleanArchMvc.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Post([FromBody] ProductDTO produtoDto)
         {
-            if (produtoDto == null)
-                return BadRequest("Data Invalid");
-
             await _productService.AddAsync(produtoDto);
 
-            return new CreatedAtRouteResult("GetProduct",
-                new { id = produtoDto.Id }, produtoDto);
+            return Created(string.Empty, null);
         }
 
         [HttpPost("UploadListProducts")]

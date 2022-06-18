@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using CleanArchMvc.API.Domain.VOs;
+using CleanArchMvc.Domain.VOs;
+using System.Threading.Tasks;
 
 namespace CleanArchMvc.Application.Interfaces.Services
 {
     public interface ITokenService
     {
-        Task<string> GetTokenAsync(string userName);
+        Task<UserToken> GetTokenAsync(string userName);
     }
 }

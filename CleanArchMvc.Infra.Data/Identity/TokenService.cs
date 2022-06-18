@@ -1,4 +1,5 @@
-﻿using CleanArchMvc.Application.Interfaces.Services;
+﻿using CleanArchMvc.API.Domain.VOs;
+using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +23,7 @@ namespace CleanArchMvc.Infrastructure.Identity
             _userManager = userManager;
         }
 
-        public async Task<string> GetTokenAsync(string email)
+        public async Task<UserToken> GetTokenAsync(string email)
         {
             var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
             var user = await _userManager.FindByEmailAsync(email);
@@ -47,7 +48,11 @@ namespace CleanArchMvc.Infrastructure.Identity
                     signingCredentials: credentials
                 );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new UserToken
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = expiration
+            };
         }
     }
 }

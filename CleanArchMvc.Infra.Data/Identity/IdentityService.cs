@@ -1,4 +1,5 @@
-﻿using CleanArchMvc.Application.Interfaces.Services;
+﻿using CleanArchMvc.Application.Exceptions;
+using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -26,6 +27,10 @@ namespace CleanArchMvc.Infrastructure.Identity
         {
             var userName = email.Split("@")[0];
             var result = await _signInManager.PasswordSignInAsync(userName, password, false, false);
+
+            if (!result.Succeeded)
+                throw new UnauthorizedException("Usuário e/ou Senha incorretos.");
+
             return result.Succeeded;
         }
 
@@ -50,13 +55,16 @@ namespace CleanArchMvc.Infrastructure.Identity
             if (result.Succeeded)
                 await _signInManager.SignInAsync(applicationUser, isPersistent: false);
 
+            if (!result.Succeeded)
+                throw new BadRequestException("Erro ao registrar usuário.");
+
             return result.Succeeded;
         }
 
         public async Task<bool> RegisterUser(string email, string password, string role)
         {
             if (!_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
-                throw new Exception("Apenas usuários Admin podem criar outros usuários");
+                throw new ForbiddenException("Apenas usuários Admin podem criar outros usuários.");
 
             var applicationUser = new ApplicationUser
             {
