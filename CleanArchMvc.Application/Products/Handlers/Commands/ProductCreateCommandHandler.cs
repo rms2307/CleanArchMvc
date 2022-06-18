@@ -1,4 +1,5 @@
-﻿using CleanArchMvc.Application.Interfaces.Repositories;
+﻿using CleanArchMvc.Application.Exceptions;
+using CleanArchMvc.Application.Interfaces.Repositories;
 using CleanArchMvc.Application.Products.Commands;
 using CleanArchMvc.Domain.Entities;
 using MediatR;
@@ -13,7 +14,7 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        public ProductCreateCommandHandler(IProductRepository productRepository, 
+        public ProductCreateCommandHandler(IProductRepository productRepository,
             ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
@@ -26,11 +27,11 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
                 request.Name, request.Description, request.Price, request.Stock, request.Image, request.CategoryId);
 
             if (product is null)
-                throw new ApplicationException($"Error creating entity");
+                throw new BadRequestException($"Error creating entity");
 
             var category = await _categoryRepository.GetCategoryByIdAsync(request.CategoryId);
             if (category is null)
-                throw new ApplicationException($"The category don't exist.");
+                throw new NotFoundException($"The category don't exist.");
 
             return await _productRepository.CreateAsync(product);
         }

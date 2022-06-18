@@ -1,4 +1,5 @@
 ﻿using CleanArchMvc.Application.Exceptions;
+using CleanArchMvc.Domain.Validation;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
@@ -27,18 +28,6 @@ namespace CleanArchMvc.API.Middleware
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
-
-        //private async Task HandleExceptionAsync(HttpContext context, Exception exception)
-        //{
-        //    context.Response.ContentType = "application/json";
-
-        //    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //    await context.Response.WriteAsync(new
-        //    {
-        //        StatusCode = context.Response.StatusCode,
-        //        Message = exception.Message
-        //    }.ToString());
-        //}
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
@@ -69,7 +58,9 @@ namespace CleanArchMvc.API.Middleware
                     return (int)HttpStatusCode.ServiceUnavailable;
                 case InternalServerErrorException _:
                     return (int)HttpStatusCode.InternalServerError;
-                case StatusCodeException _:
+                case DomainExceptionValidation _:
+                    return (int)HttpStatusCode.BadRequest;
+                case StatusCodeException _:                
                     return GetGenericStatusCode(ex.Message);
                 default:
                     return (int)HttpStatusCode.InternalServerError;

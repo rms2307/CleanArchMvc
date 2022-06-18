@@ -1,7 +1,9 @@
-﻿using CleanArchMvc.Application.Interfaces.Services;
+﻿using CleanArchMvc.Application.Exceptions;
+using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Domain.Entities;
 using CleanArchMvc.Domain.VOs;
 using ExcelDataReader;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -13,30 +15,37 @@ namespace CleanArchMvc.Infrastructure.Files
     {
         public List<Product> ReadFile(FormFile file)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            List<Product> products = new();
-
-            using var ms = new MemoryStream();
-            file.FileContent.CopyTo(ms);
-
-            using var reader = ExcelReaderFactory.CreateReader(ms);
-            DataSet result = reader.AsDataSet();
-
-            if (result != null)
+            try
             {
-                DataTable table = result.Tables[0];
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-                if (table != null)
+                List<Product> products = new();
+
+                using var ms = new MemoryStream();
+                file.FileContent.CopyTo(ms);
+
+                using var reader = ExcelReaderFactory.CreateReader(ms);
+                DataSet result = reader.AsDataSet();
+
+                if (result != null)
                 {
-                    foreach (DataRow row in table.Rows)
+                    DataTable table = result.Tables[0];
+
+                    if (table != null)
                     {
-                        products.Add(GetProduct(row));
+                        foreach (DataRow row in table.Rows)
+                        {
+                            products.Add(GetProduct(row));
+                        }
                     }
                 }
-            }
 
-            return products;
+                return products;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalServerErrorException($"Erro ao importar arquivo: {ex.Message}");
+            }
         }
 
         private Product GetProduct(DataRow row)
