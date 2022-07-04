@@ -18,8 +18,8 @@ namespace CleanArchMvc.Infrastructure.Identity
 
         public void SeedUsers()
         {
-            CreateUser("usuario@localhost", "usuario@localhost", "USUARIO@LOCALHOST", "USUARIO@LOCALHOST", true, false, "Numsey#2021", "User");
-            CreateUser("admin@localhost", "admin@localhost", "ADMIN@LOCALHOST", "ADMIN@LOCALHOST", true, false, "Numsey#2021", "Admin");
+            CreateUser("usuario", "usuario@localhost", "USUARIO@LOCALHOST", "USUARIO@LOCALHOST", true, false, "Numsey#2021", "User");
+            CreateUser("admin", "admin@localhost", "ADMIN@LOCALHOST", "ADMIN@LOCALHOST", true, false, "Numsey#2021", "Admin");
         }
 
         public void SeedRoles()

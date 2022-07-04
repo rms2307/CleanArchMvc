@@ -1,4 +1,5 @@
-using CleanArchMvc.API.Middleware;
+using CleanArchMvc.API.Middlewares;
+using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Infra.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +30,7 @@ namespace CleanArchMvc.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUserRoleInitial seedUserRoleInitial)
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -40,8 +41,11 @@ namespace CleanArchMvc.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchMvc.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            seedUserRoleInitial.SeedRoles();
+            seedUserRoleInitial.SeedUsers();
+
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseHttpsRedirection();            
             app.UseStatusCodePages();
             app.UseRouting();
             app.UseAuthentication();

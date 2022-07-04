@@ -1,19 +1,18 @@
-﻿using CleanArchMvc.API.Domain.VOs;
+﻿using CleanArchMvc.API.Annotations;
+using CleanArchMvc.API.Domain.VOs;
 using CleanArchMvc.API.DTOs.Account;
+using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.Interfaces.Services;
-using CleanArchMvc.Domain.VOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Threading.Tasks;
 
 namespace CleanArchMvc.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -28,15 +27,16 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpPost("Login")]
+        [ValidForm]
         [SwaggerOperation(
             Summary = "Endpoint responsável pelo login do usuário."
         )]
-        [ProducesResponseType(typeof(UserToken), StatusCodes.Status200OK)]
-        public async Task<ActionResult<UserToken>> Login([FromBody] LoginDTO login)
+        [ProducesResponseType(typeof(ResultDto<UserToken>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ResultDto<UserToken>>>Login([FromBody] LoginDTO login)
         {
             await _accountService.Authenticate(login.Email, login.Password);
 
-            return Ok(await _tokenService.GetTokenAsync(login.Email));
+            return Ok(new ResultDto<UserToken>(await _tokenService.GetTokenAsync(login.Email)));
         }
 
         [HttpPost("CreateUser")]

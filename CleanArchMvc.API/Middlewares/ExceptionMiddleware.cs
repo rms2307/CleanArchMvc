@@ -1,4 +1,5 @@
-﻿using CleanArchMvc.Application.Exceptions;
+﻿using CleanArchMvc.Application.DTOs;
+using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Domain.Validation;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -6,7 +7,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CleanArchMvc.API.Middleware
+namespace CleanArchMvc.API.Middlewares
 {
     public class ExceptionMiddleware
     {
@@ -34,7 +35,9 @@ namespace CleanArchMvc.API.Middleware
             var response = new InternalServerErrorException(GetGenericStatusCodeMessage(exception));
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = GetStatusCode(exception);
-            return context.Response.WriteAsync(JsonSerializer.Serialize(new { response.Message },
+            var result = new ResultDto<string>(response.Message);
+
+            return context.Response.WriteAsync(JsonSerializer.Serialize(result,
                 new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
