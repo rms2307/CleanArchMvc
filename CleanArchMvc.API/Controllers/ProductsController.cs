@@ -23,28 +23,34 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpGet]
         [Authorize]
+        [SwaggerOperation(
+            Summary = "Endpoint responsável por buscar todos produtos."
+        )]
+        [ProducesResponseType(typeof(ResultDto<IEnumerable<ProductDTO>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
         {
             var produtos = await _productService.GetProductsAsync();
-            if (produtos == null)
-                return NotFound("Products not found");
 
-            return Ok(produtos);
+            return Ok(new ResultDto<IEnumerable<ProductDTO>>(produtos));
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
         [Authorize]
+        [SwaggerOperation(
+            Summary = "Endpoint responsável por buscar um produto por id."
+        )]
         public async Task<ActionResult<ProductDTO>> Get(int id)
         {
             var produto = await _productService.GetByIdAsync(id);
-            if (produto == null)
-                return NotFound("Product not found");
 
-            return Ok(produto);
+            return Ok(new ResultDto<ProductDTO>(produto));
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [SwaggerOperation(
+            Summary = "Endpoint responsável cadastrar um produto (Admin)."
+        )]
         public async Task<ActionResult> Post([FromBody] ProductDTO produtoDto)
         {
             await _productService.AddAsync(produtoDto);
@@ -60,37 +66,25 @@ namespace CleanArchMvc.API.Controllers
         [ProducesResponseType(typeof(CleanArchMvc.Domain.VOs.FormFile), StatusCodes.Status200OK)]
         public async Task<ActionResult> UploadListProducts([FromForm] IFormFile file)
         {
-            try
-            {
-                CleanArchMvc.Domain.VOs.FormFile formFile = new(
-                    file.OpenReadStream(),
-                    file.Name,
-                    file.FileName,
-                    file.Length,
-                    file.ContentType
-                    );
+            CleanArchMvc.Domain.VOs.FormFile formFile = new(
+                file.OpenReadStream(),
+                file.Name,
+                file.FileName,
+                file.Length,
+                file.ContentType);
 
-                await _productService.UploadListProductsAsync(formFile);
+            await _productService.UploadListProductsAsync(formFile);
 
-                return Created(string.Empty, null);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Errors", ex.Message);
-                return BadRequest(ModelState);
-            }
+            return Created(string.Empty, null);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Put(int id, [FromBody] ProductDTO produtoDto)
+        [SwaggerOperation(
+            Summary = "Endpoint responsável atualizar um produto (Admin)."
+        )]
+        public async Task<ActionResult> Put([FromBody] ProductDTO produtoDto)
         {
-            if (id != produtoDto.Id)
-                return BadRequest("Data invalid");
-
-            if (produtoDto == null)
-                return BadRequest("Data invalid");
-
             await _productService.UpdateAsync(produtoDto);
 
             return Ok(produtoDto);
@@ -98,16 +92,14 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [SwaggerOperation(
+            Summary = "Endpoint responsável remover um produto (Admin)."
+        )]
         public async Task<ActionResult<ProductDTO>> Delete(int id)
         {
-            var produtoDto = await _productService.GetByIdAsync(id);
-
-            if (produtoDto == null)
-                return NotFound("Product not found");
-
             await _productService.RemoveAsync(id);
 
-            return Ok(produtoDto);
+            return Ok();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace CleanArchMvc.API.Controllers
             Summary = "Endpoint responsável pelo login do usuário."
         )]
         [ProducesResponseType(typeof(ResultDto<UserToken>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<ResultDto<UserToken>>>Login([FromBody] LoginDTO login)
+        public async Task<ActionResult<ResultDto<UserToken>>> Login([FromBody] LoginDTO login)
         {
             await _accountService.Authenticate(login.Email, login.Password);
 
@@ -47,7 +47,7 @@ namespace CleanArchMvc.API.Controllers
         {
             await _accountService.RegisterUser(userDTO.Email, userDTO.Password);
 
-            return Created(string.Empty, userDTO);
+            return Created(string.Empty, new ResultDto<RegisterUserDTO>(userDTO));
         }
 
         [HttpPost("AdminCreateUser")]
@@ -59,7 +59,7 @@ namespace CleanArchMvc.API.Controllers
         {
             await _accountService.RegisterUser(userDTO.Email, userDTO.Password, userDTO.Role);
 
-            return Created(string.Empty, userDTO);
+            return Created(string.Empty, new ResultDto<AdminRegisterUserDTO>(userDTO));
         }
     }
 }

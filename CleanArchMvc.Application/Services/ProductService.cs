@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchMvc.Application.DTOs;
+using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Products.Commands;
 using CleanArchMvc.Application.Products.Queries;
@@ -24,12 +25,18 @@ namespace CleanArchMvc.Application.Services
         public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
         {
             var result = await _mediator.Send(new GetProductsQuery());
+            if (result == null)
+                throw new NotFoundException("Products not found");
+
             return _mapper.Map<IEnumerable<ProductDTO>>(result);
         }
 
         public async Task<ProductDTO> GetByIdAsync(int? id)
         {
             var getProductByIdQuery = await _mediator.Send(new GetProductByIdQuery(id.Value));
+            if (getProductByIdQuery == null)
+                throw new NotFoundException("Product not found");
+
             return _mapper.Map<ProductDTO>(getProductByIdQuery);
         }
 
@@ -41,18 +48,29 @@ namespace CleanArchMvc.Application.Services
 
         public async Task UpdateAsync(ProductDTO productDTO)
         {
+            await CanUpdateOrDelete(productDTO.Id);
+
             var productUpdateCommand = _mapper.Map<ProductUpdateCommand>(productDTO);
             await _mediator.Send(productUpdateCommand);
         }
 
         public async Task RemoveAsync(int? id)
         {
+            await CanUpdateOrDelete(id.Value);
+
             await _mediator.Send(new ProductRemoveCommand(id.Value));
         }
 
         public async Task UploadListProductsAsync(FormFile file)
         {
             await _mediator.Send(new ProductUploadListProductsCommand(file));
+        }
+
+        private async Task CanUpdateOrDelete(int id)
+        {
+            var getProductByIdQuery = await _mediator.Send(new GetProductByIdQuery(id));
+            if (getProductByIdQuery == null)
+                throw new NotFoundException("Product not found");
         }
     }
 }
