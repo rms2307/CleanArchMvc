@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchMvc.Application.DTOs;
+using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Application.Interfaces.Repositories;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Domain.Entities;
@@ -28,6 +29,10 @@ namespace CleanArchMvc.Application.Services
         public async Task<CategoryDTO> GetByIdAsync(int? id)
         {
             var category = await _repository.GetCategoryByIdAsync(id);
+
+            if (category == null)
+                throw new NotFoundException("Category not found.");
+
             return _mapper.Map<CategoryDTO>(category);
         }
 
@@ -40,6 +45,10 @@ namespace CleanArchMvc.Application.Services
         public async Task RemoveAsync(int? id)
         {
             var category = await _repository.GetCategoryByIdAsync(id);
+
+            if (category == null)
+                throw new NotFoundException("Categoria não encontrada");
+
             await _repository.RemoveAsync(category);
         }
 
