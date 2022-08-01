@@ -16,7 +16,7 @@ namespace CleanArchMvc.API.Annotations
             if (!context.ModelState.IsValid)
             {
                 var errors = GetErrors(context.ModelState);
-                context.Result = new BadRequestObjectResult(new ResultDto<List<string>>(errors));
+                context.Result = new BadRequestObjectResult(new ApiResponse<List<string>>(errors));
                 return;
             }
 

@@ -1,12 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CleanArchMvc.API.DTOs.Account
+namespace CleanArchMvc.Application.DTOs.Account
 {
     public class AdminRegisterUserDTO
     {
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; }
 
         [Required]
         [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max " +

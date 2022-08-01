@@ -2,27 +2,27 @@
 
 namespace CleanArchMvc.Application.DTOs
 {
-    public class ResultDto<T>
+    public class ApiResponse<T>
     {
         public T Data { get; private set; }
         public List<string> Errors { get; private set; } = new();
 
-        public ResultDto(T data)
+        public ApiResponse(T data)
         {
             Data = data;
         }
 
-        public ResultDto(List<string> errors)
+        public ApiResponse(List<string> errors)
         {
             Errors = errors;
         }
 
-        public ResultDto(string error)
+        public ApiResponse(string error)
         {
             Errors.Add(error);
         }
 
-        public ResultDto(T data, List<string> errors)
+        public ApiResponse(T data, List<string> errors)
         {
             Data = data;
             Errors = errors;

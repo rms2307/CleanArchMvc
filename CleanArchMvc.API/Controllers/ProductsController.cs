@@ -26,12 +26,12 @@ namespace CleanArchMvc.API.Controllers
         [SwaggerOperation(
             Summary = "Endpoint responsável por buscar todos produtos."
         )]
-        [ProducesResponseType(typeof(ResultDto<IEnumerable<ProductDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<IEnumerable<ProductDTO>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
         {
             var produtos = await _productService.GetProductsAsync();
 
-            return Ok(new ResultDto<IEnumerable<ProductDTO>>(produtos));
+            return Ok(new ApiResponse<IEnumerable<ProductDTO>>(produtos));
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
@@ -43,7 +43,7 @@ namespace CleanArchMvc.API.Controllers
         {
             var produto = await _productService.GetByIdAsync(id);
 
-            return Ok(new ResultDto<ProductDTO>(produto));
+            return Ok(new ApiResponse<ProductDTO>(produto));
         }
 
         [HttpPost]

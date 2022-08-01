@@ -35,7 +35,7 @@ namespace CleanArchMvc.API.Middlewares
             var response = new InternalServerErrorException(GetGenericStatusCodeMessage(exception));
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = GetStatusCode(exception);
-            var result = new ResultDto<string>(response.Message);
+            var result = new ApiResponse<string>(response.Message);
 
             return context.Response.WriteAsync(JsonSerializer.Serialize(result,
                 new JsonSerializerOptions

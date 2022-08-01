@@ -1,8 +1,12 @@
-﻿using CleanArchMvc.Application.Exceptions;
+﻿using CleanArchMvc.Application.DTOs;
+using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CleanArchMvc.Infrastructure.Identity
@@ -25,7 +29,7 @@ namespace CleanArchMvc.Infrastructure.Identity
 
         public async Task<bool> Authenticate(string email, string password)
         {
-            var userName = email.Split("@")[0];
+            string userName = GetUsername(email);
             var result = await _signInManager.PasswordSignInAsync(userName, password, false, false);
 
             if (!result.Succeeded)
@@ -34,43 +38,48 @@ namespace CleanArchMvc.Infrastructure.Identity
             return result.Succeeded;
         }
 
-        public async Task<bool> RegisterUser(string email, string password)
+        public async Task<bool> RegisterUser(string email, string password, string phoneNumber)
         {
             var applicationUser = new ApplicationUser
             {
-                UserName = email.Split("@")[0],
+                UserName = GetUsername(email),
                 Email = email,
-                NormalizedUserName = email.Split("@")[0].ToUpper(),
+                PhoneNumber = phoneNumber,
+                PhoneNumberConfirmed = true,
+                NormalizedUserName = GetUsername(email).ToUpper(),
                 NormalizedEmail = email.ToUpper(),
                 EmailConfirmed = true,
                 LockoutEnabled = false,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
             };
 
             var result = await _userManager.CreateAsync(applicationUser, password);
 
             if (result.Succeeded)
-                result = await _userManager.AddToRoleAsync(applicationUser, "User");
+                result = await _userManager.AddToRoleAsync(applicationUser, RoleConstants.USER);
 
             if (result.Succeeded)
                 await _signInManager.SignInAsync(applicationUser, isPersistent: false);
 
             if (!result.Succeeded)
-                throw new BadRequestException("Erro ao registrar usuário.");
+                throw new BadRequestException("Error: " + result.Errors
+                    .Select(x => x.Description).Aggregate((ex1, ex2) => $"{ex1}, {ex2}"));
 
             return result.Succeeded;
         }
 
-        public async Task<bool> RegisterUser(string email, string password, string role)
+        public async Task<bool> RegisterUser(string email, string password, string phoneNumber, string role)
         {
-            if (!_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            if (!_httpContextAccessor.HttpContext.User.IsInRole(RoleConstants.ADMIN))
                 throw new ForbiddenException("Apenas usuários Admin podem criar outros usuários.");
 
             var applicationUser = new ApplicationUser
             {
-                UserName = email.Split("@")[0],
+                UserName = GetUsername(email),
                 Email = email,
-                NormalizedUserName = email.Split("@")[0].ToUpper(),
+                PhoneNumber = phoneNumber,
+                PhoneNumberConfirmed = true,
+                NormalizedUserName = GetUsername(email).ToUpper(),
                 NormalizedEmail = email.ToUpper(),
                 EmailConfirmed = true,
                 LockoutEnabled = false,
@@ -85,12 +94,21 @@ namespace CleanArchMvc.Infrastructure.Identity
             if (result.Succeeded)
                 await _signInManager.SignInAsync(applicationUser, isPersistent: false);
 
+            if (!result.Succeeded)
+                throw new BadRequestException("Error: " + result.Errors
+                    .Select(x => x.Description).Aggregate((ex1, ex2) => $"{ex1}, {ex2}"));
+
             return result.Succeeded;
         }
 
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        private static string GetUsername(string email)
+        {
+            return email.Split("@")[0];
         }
     }
 }

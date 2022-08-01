@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CleanArchMvc.API.DTOs.Account
+namespace CleanArchMvc.Application.DTOs.Account
 {
     public class LoginDTO
     {
