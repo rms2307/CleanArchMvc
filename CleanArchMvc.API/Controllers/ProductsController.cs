@@ -1,11 +1,10 @@
-﻿using CleanArchMvc.Application.DTOs;
+﻿using CleanArchMvc.API.ApiModels.Response;
+using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.Interfaces.Services;
-using CleanArchMvc.Domain.VOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

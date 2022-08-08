@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CleanArchMvc.Application.DTOs
+namespace CleanArchMvc.API.ApiModels.Response
 {
     public class ApiResponse<T>
     {

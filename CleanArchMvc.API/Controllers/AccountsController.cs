@@ -1,6 +1,6 @@
 ﻿using CleanArchMvc.API.Annotations;
+using CleanArchMvc.API.ApiModels.Response;
 using CleanArchMvc.API.Domain.VOs;
-using CleanArchMvc.Application.DTOs;
 using CleanArchMvc.Application.DTOs.Account;
 using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;

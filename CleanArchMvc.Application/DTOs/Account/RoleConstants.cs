@@ -1,4 +1,4 @@
-﻿namespace CleanArchMvc.Application.DTOs
+﻿namespace CleanArchMvc.Application.DTOs.Account
 {
     public static class RoleConstants
     {

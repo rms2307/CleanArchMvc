@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Application.DTOs;
+﻿using CleanArchMvc.Application.DTOs.Account;
 using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
