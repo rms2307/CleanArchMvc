@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Application.DTOs;
+﻿using CleanArchMvc.API.ApiModels.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

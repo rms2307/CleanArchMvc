@@ -1,4 +1,4 @@
-﻿using CleanArchMvc.Application.DTOs;
+﻿using CleanArchMvc.API.ApiModels.Response;
 using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Domain.Validation;
 using Microsoft.AspNetCore.Http;
