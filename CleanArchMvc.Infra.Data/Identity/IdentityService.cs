@@ -35,25 +35,29 @@ namespace CleanArchMvc.Infrastructure.Identity
             if (!result.Succeeded)
                 throw new UnauthorizedException("Usuário e/ou Senha incorretos.");
 
+            if (result.RequiresTwoFactor)
+                Console.WriteLine("AQUI ==>> RequiresTwoFactor");
+
             return result.Succeeded;
         }
 
-        public async Task<bool> RegisterUser(string email, string password, string phoneNumber)
+        public async Task<bool> RegisterUser(RegisterUserDTO dto)
         {
             var applicationUser = new ApplicationUser
             {
-                UserName = GetUsername(email),
-                Email = email,
-                PhoneNumber = phoneNumber,
+                UserName = GetUsername(dto.Email),
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
                 PhoneNumberConfirmed = true,
-                NormalizedUserName = GetUsername(email).ToUpper(),
-                NormalizedEmail = email.ToUpper(),
+                NormalizedUserName = GetUsername(dto.Email).ToUpper(),
+                NormalizedEmail = dto.Email.ToUpper(),
                 EmailConfirmed = true,
                 LockoutEnabled = false,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                TwoFactorEnabled = dto.EnabledTwoFactor,
             };
 
-            var result = await _userManager.CreateAsync(applicationUser, password);
+            var result = await _userManager.CreateAsync(applicationUser, dto.Password);
 
             if (result.Succeeded)
                 result = await _userManager.AddToRoleAsync(applicationUser, RoleConstants.USER);
@@ -68,28 +72,29 @@ namespace CleanArchMvc.Infrastructure.Identity
             return result.Succeeded;
         }
 
-        public async Task<bool> RegisterUser(string email, string password, string phoneNumber, string role)
+        public async Task<bool> RegisterUser(AdminRegisterUserDTO dto)
         {
             if (!_httpContextAccessor.HttpContext.User.IsInRole(RoleConstants.ADMIN))
                 throw new ForbiddenException("Apenas usuários Admin podem criar outros usuários.");
 
             var applicationUser = new ApplicationUser
             {
-                UserName = GetUsername(email),
-                Email = email,
-                PhoneNumber = phoneNumber,
+                UserName = GetUsername(dto.Email),
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
                 PhoneNumberConfirmed = true,
-                NormalizedUserName = GetUsername(email).ToUpper(),
-                NormalizedEmail = email.ToUpper(),
+                NormalizedUserName = GetUsername(dto.Email).ToUpper(),
+                NormalizedEmail = dto.Email.ToUpper(),
                 EmailConfirmed = true,
                 LockoutEnabled = false,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                TwoFactorEnabled = dto.EnabledTwoFactor,
             };
 
-            var result = await _userManager.CreateAsync(applicationUser, password);
+            var result = await _userManager.CreateAsync(applicationUser, dto.Password);
 
             if (result.Succeeded)
-                result = await _userManager.AddToRoleAsync(applicationUser, role);
+                result = await _userManager.AddToRoleAsync(applicationUser, dto.Role);
 
             if (result.Succeeded)
                 await _signInManager.SignInAsync(applicationUser, isPersistent: false);

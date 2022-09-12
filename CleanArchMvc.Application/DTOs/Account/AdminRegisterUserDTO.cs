@@ -25,5 +25,7 @@ namespace CleanArchMvc.Application.DTOs.Account
 
         [Required]
         public string Role { get; set; }
+
+        public bool EnabledTwoFactor { get; set; }
     }
 }

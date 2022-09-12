@@ -22,5 +22,7 @@ namespace CleanArchMvc.Application.DTOs.Account
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Passwords don´t match")]
         public string ConfirmPassword { get; set; }
+
+        public bool EnabledTwoFactor { get; set; }
     }
 }

@@ -28,9 +28,7 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpPost("Login")]
         [ValidForm]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável pelo login do usuário."
-        )]
+        [SwaggerOperation(Summary = "Endpoint responsável pelo login do usuário.")]
         [ProducesResponseType(typeof(ApiResponse<UserToken>), StatusCodes.Status200OK)]
         public async Task<ActionResult<ApiResponse<UserToken>>> Login([FromBody] LoginDTO login)
         {
@@ -41,25 +39,21 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpPost("CreateUser")]
         [ValidForm]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável por registrar um usuário."
-        )]
+        [SwaggerOperation(Summary = "Endpoint responsável por registrar um usuário.")]
         public async Task<ActionResult> CreateUser([FromBody] RegisterUserDTO userDTO)
         {
-            await _accountService.RegisterUser(userDTO.Email, userDTO.Password, userDTO.PhoneNumber);
+            await _accountService.RegisterUser(userDTO);
 
             return Created(string.Empty, null);
         }
 
         [HttpPost("AdminCreateUser")]
         [ValidForm]
-        [SwaggerOperation(
-            Summary = "Endpoint para um usuário com a role Admin registrar outros usuários"
-        )]
+        [SwaggerOperation(Summary = "Endpoint para um usuário com a role Admin registrar outros usuários")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AdminCreateUser([FromBody] AdminRegisterUserDTO userDTO)
         {
-            await _accountService.RegisterUser(userDTO.Email, userDTO.Password, userDTO.PhoneNumber, userDTO.Role);
+            await _accountService.RegisterUser(userDTO);
 
             return Created(string.Empty, new ApiResponse<AdminRegisterUserDTO>(userDTO));
         }

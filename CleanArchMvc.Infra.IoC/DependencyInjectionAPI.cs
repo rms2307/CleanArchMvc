@@ -6,6 +6,7 @@ using CleanArchMvc.Infrastructure;
 using CleanArchMvc.Infrastructure.Files;
 using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;
+using CleanArchMvc.Infrastructure.SMS;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,14 @@ namespace CleanArchMvc.Infra.IoC
 
             RegisterIdentity(services);
 
+            RegisterSMSOptions(services, configuration);
+
             return services;
+        }
+
+        private static void RegisterSMSOptions(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<SMSoptions>(configuration);
         }
 
         private static void RegisterIdentity(IServiceCollection services)
@@ -63,7 +71,7 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<IAccountService, IdentityService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
             services.AddScoped<ITokenService, TokenService>();
-            //services.AddScoped<IFileService, CSVReader>();
+            services.AddScoped<IFileService, CSVReader>();
             services.AddScoped<IFileService, ExcelReader>();
         }
 
