@@ -1,5 +1,5 @@
-﻿using CleanArchMvc.API.Domain.VOs;
-using CleanArchMvc.Application.Interfaces.Services;
+﻿using CleanArchMvc.Application.Interfaces.Services;
+using CleanArchMvc.Domain.VOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

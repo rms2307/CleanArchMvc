@@ -1,6 +1,5 @@
 ﻿using CleanArchMvc.API.Annotations;
 using CleanArchMvc.API.ApiModels.Response;
-using CleanArchMvc.API.Domain.VOs;
 using CleanArchMvc.Application.DTOs.Account;
 using CleanArchMvc.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -29,12 +28,23 @@ namespace CleanArchMvc.API.Controllers
         [HttpPost("Login")]
         [ValidForm]
         [SwaggerOperation(Summary = "Endpoint responsável pelo login do usuário.")]
-        [ProducesResponseType(typeof(ApiResponse<UserToken>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<ApiResponse<UserToken>>> Login([FromBody] LoginDTO login)
+        [ProducesResponseType(typeof(ApiResponse<AuthenticationResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ApiResponse<AuthenticationResponseDTO>>> Login([FromBody] LoginDTO login)
         {
-            await _accountService.Authenticate(login.Email, login.Password);
+            AuthenticationResponseDTO userToken = await _accountService.Authenticate(login.Email, login.Password);
 
-            return Ok(new ApiResponse<UserToken>(await _tokenService.GetTokenAsync(login.Email)));
+            return Ok(new ApiResponse<AuthenticationResponseDTO>(userToken));
+        }
+
+        [HttpPost("LoginTwoFactor")]
+        [ValidForm]
+        [SwaggerOperation(Summary = "Endpoint responsável por verificar código de dois fatores e fazer login se código valido.")]
+        [ProducesResponseType(typeof(ApiResponse<AuthenticationResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ApiResponse<AuthenticationResponseDTO>>> VerifyTwoFactor([FromBody] LoginTwoFactorDTO login)
+        {
+            AuthenticationResponseDTO userToken = await _accountService.Authenticate(login);
+
+            return Ok(new ApiResponse<AuthenticationResponseDTO>(userToken));
         }
 
         [HttpPost("CreateUser")]
@@ -49,7 +59,7 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpPost("AdminCreateUser")]
         [ValidForm]
-        [SwaggerOperation(Summary = "Endpoint para um usuário com a role Admin registrar outros usuários")]
+        [SwaggerOperation(Summary = "Endpoint para um usuário com a role Admin registrar novos usuários")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AdminCreateUser([FromBody] AdminRegisterUserDTO userDTO)
         {

@@ -1,6 +1,6 @@
-﻿namespace CleanArchMvc.Infrastructure.SMS
+﻿namespace CleanArchMvc.Infrastructure.Twilio
 {
-    public class SMSoptions
+    public class TwilioOptions
     {
         public string SMSAccountIdentification { get; set; }
         public string SMSAccountPassword { get; set; }

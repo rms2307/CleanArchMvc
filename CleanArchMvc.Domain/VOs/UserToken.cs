@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CleanArchMvc.API.Domain.VOs
+namespace CleanArchMvc.Domain.VOs
 {
     public class UserToken
     {

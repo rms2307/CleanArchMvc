@@ -6,7 +6,7 @@ using CleanArchMvc.Infrastructure;
 using CleanArchMvc.Infrastructure.Files;
 using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;
-using CleanArchMvc.Infrastructure.SMS;
+using CleanArchMvc.Infrastructure.Twilio;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +39,7 @@ namespace CleanArchMvc.Infra.IoC
 
         private static void RegisterSMSOptions(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<SMSoptions>(configuration);
+            services.Configure<TwilioOptions>(configuration);
         }
 
         private static void RegisterIdentity(IServiceCollection services)
@@ -73,6 +73,8 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IFileService, CSVReader>();
             services.AddScoped<IFileService, ExcelReader>();
+
+            services.AddScoped<ISMSService, TwilioService>();
         }
 
         private static void RegisterRepositories(IServiceCollection services, IConfiguration configuration)
