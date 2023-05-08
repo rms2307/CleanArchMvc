@@ -6,6 +6,7 @@ using CleanArchMvc.Infrastructure;
 using CleanArchMvc.Infrastructure.Files;
 using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;
+using CleanArchMvc.Infrastructure.Storage;
 using CleanArchMvc.Infrastructure.Twilio;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -75,6 +76,8 @@ namespace CleanArchMvc.Infra.IoC
             services.AddScoped<IFileService, ExcelReader>();
 
             services.AddScoped<ISMSService, TwilioService>();
+
+            services.AddScoped<IStorageService, AwsS3Service>();
         }
 
         private static void RegisterRepositories(IServiceCollection services, IConfiguration configuration)
