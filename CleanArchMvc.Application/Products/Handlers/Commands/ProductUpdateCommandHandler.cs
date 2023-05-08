@@ -26,7 +26,7 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
                 throw new NotFoundException($"Entity could not be found");
 
             product.Update(request.Name, request.Description, request.Price, request.Stock,
-                                request.Image, request.CategoryId);
+                                request.ImageUrl, request.CategoryId);
 
             return await _productRepository.UpdateAsync(product);
         }
