@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CleanArchMvc.Application.Interfaces.Repositories;
+﻿using CleanArchMvc.Application.Interfaces.Repositories;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Products.Commands;
 using CleanArchMvc.Domain.Entities;
@@ -14,14 +13,12 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
     {
         public readonly IProductRepository _productRepository;
         public readonly IFileService _fileService;
-        private readonly IMapper _mapper;
 
         public ProductUploadListProductsCommandHandler(IProductRepository productRepository,
-            IFileService fileService, IMapper mapper)
+            IFileService fileService)
         {
             _productRepository = productRepository;
             _fileService = fileService;
-            _mapper = mapper;
         }
 
         public async Task<List<Product>> Handle(ProductUploadListProductsCommand request, CancellationToken cancellationToken)

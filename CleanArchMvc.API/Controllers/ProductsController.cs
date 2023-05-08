@@ -57,15 +57,15 @@ namespace CleanArchMvc.API.Controllers
             return Created(string.Empty, null);
         }
 
-        [HttpPost("UploadListProducts")]
+        [HttpPost("UploadFileListProducts")]
         [Authorize(Roles = "Admin")]
         [SwaggerOperation(
             Summary = "Endpoint responsável pelo upload do arquivo com a lista de produtos (Admin)."
         )]
-        [ProducesResponseType(typeof(CleanArchMvc.Domain.VOs.FormFile), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Domain.VOs.FormFile), StatusCodes.Status200OK)]
         public async Task<ActionResult> UploadListProducts([FromForm] IFormFile file)
         {
-            CleanArchMvc.Domain.VOs.FormFile formFile = new(
+            Domain.VOs.FormFile formFile = new(
                 file.OpenReadStream(),
                 file.Name,
                 file.FileName,

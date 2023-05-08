@@ -6,11 +6,7 @@ using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
 using CleanArchMvc.Application.Tests.TestHelpers;
 using CleanArchMvc.Domain.Entities;
-using CleanArchMvc.Domain.Validation;
-using FluentAssertions;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CleanArchMvc.Application.Tests

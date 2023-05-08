@@ -15,14 +15,10 @@ namespace CleanArchMvc.API.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly ITokenService _tokenService;
-        private readonly IConfiguration _configuration;
 
-        public AccountsController(IAccountService accountService, ITokenService tokenService, IConfiguration configuration)
+        public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;
-            _tokenService = tokenService;
-            _configuration = configuration;
         }
 
         [HttpPost("Login")]
