@@ -50,7 +50,7 @@ namespace CleanArchMvc.API.Controllers
         [SwaggerOperation(
             Summary = "Endpoint responsável cadastrar um produto (Admin)."
         )]
-        public async Task<ActionResult> Post([FromBody] ProductDTO produtoDto)
+        public async Task<ActionResult> Post([FromForm] ProductDTO produtoDto)
         {
             await _productService.AddAsync(produtoDto);
 
