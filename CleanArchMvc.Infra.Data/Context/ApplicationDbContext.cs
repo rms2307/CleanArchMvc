@@ -4,7 +4,6 @@ using CleanArchMvc.Domain.Interfaces;
 using CleanArchMvc.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

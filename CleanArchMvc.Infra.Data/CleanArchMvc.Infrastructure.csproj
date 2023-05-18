@@ -21,6 +21,7 @@
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
     <PackageReference Include="Twilio" Version="5.78.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.103.21" />
   </ItemGroup>
 
   <ItemGroup>

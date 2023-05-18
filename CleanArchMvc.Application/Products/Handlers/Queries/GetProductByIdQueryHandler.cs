@@ -19,7 +19,7 @@ namespace CleanArchMvc.Application.Products.Handlers.Queries
 
         public async Task<Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _productRepository.GetProductByIdAsync(request.Id);
+            return await _productRepository.GetProductAsync(request.Id);
         }
     }
 }

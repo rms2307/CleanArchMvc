@@ -8,8 +8,8 @@ namespace CleanArchMvc.Application.Mappings
     {
         public DTOToCommandMappingProfile()
         {
-            CreateMap<ProductDTO, ProductCreateCommand>();
-            CreateMap<ProductDTO, ProductUpdateCommand>();
+            CreateMap<CreateProductDTO, ProductCreateCommand>();
+            CreateMap<UpdateProductDTO, ProductUpdateCommand>();
         }
     }
 }
