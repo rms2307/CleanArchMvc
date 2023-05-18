@@ -29,7 +29,7 @@ namespace CleanArchMvc.Infrastructure.Repositories
             return products;
         }
 
-        public async Task<Product> GetProductByIdAsync(int? id)
+        public async Task<Product> GetProductAsync(int? id)
         {
             return await _context.Products.Include(x => x.Category)
                 .FirstOrDefaultAsync(x => x.Id == id);

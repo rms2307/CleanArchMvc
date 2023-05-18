@@ -49,7 +49,7 @@ namespace CleanArchMvc.API.Controllers
         {
             await _productService.AddAsync(produtoDto);
 
-            return Created(string.Empty, null);
+            return Created(string.Empty, produtoDto);
         }
 
         [HttpPost("UploadFileListProducts")]
@@ -77,17 +77,17 @@ namespace CleanArchMvc.API.Controllers
         {
             await _productService.UpdateAsync(produtoDto);
 
-            return Ok(produtoDto);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Endpoint responsável remover um produto (Admin).")]
-        public async Task<ActionResult<ProductDTO>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             await _productService.RemoveAsync(id);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

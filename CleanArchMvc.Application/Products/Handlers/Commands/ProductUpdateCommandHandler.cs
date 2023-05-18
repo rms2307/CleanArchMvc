@@ -23,7 +23,7 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
 
         public async Task<Product> Handle(ProductUpdateCommand request, CancellationToken cancellationToken)
         {
-            Product product = await _productRepository.GetProductByIdAsync(request.Id);
+            Product product = await _productRepository.GetProductAsync(request.Id);
             if (product is null)
                 throw new NotFoundException($"Product {request.Id} could not be found");
 
