@@ -15,6 +15,7 @@ namespace CleanArchMvc.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
+
         public ProductsController(IProductService productService)
         {
             _productService = productService;
@@ -22,35 +23,29 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpGet]
         [Authorize]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável por buscar todos produtos."
-        )]
+        [SwaggerOperation(Summary = "Endpoint responsável por buscar todos produtos.")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<ProductDTO>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
         {
-            var produtos = await _productService.GetProductsAsync();
+            IEnumerable<ProductDTO> produtos = await _productService.GetProductsAsync();
 
             return Ok(new ApiResponse<IEnumerable<ProductDTO>>(produtos));
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
         [Authorize]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável por buscar um produto por id."
-        )]
+        [SwaggerOperation(Summary = "Endpoint responsável por buscar um produto por id.")]
         public async Task<ActionResult<ProductDTO>> Get(int id)
         {
-            var produto = await _productService.GetByIdAsync(id);
+            ProductDTO produto = await _productService.GetByIdAsync(id);
 
             return Ok(new ApiResponse<ProductDTO>(produto));
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável cadastrar um produto (Admin)."
-        )]
-        public async Task<ActionResult> Post([FromForm] ProductDTO produtoDto)
+        [SwaggerOperation(Summary = "Endpoint responsável cadastrar um produto (Admin).")]
+        public async Task<ActionResult> Post([FromForm] CreateProductDTO produtoDto)
         {
             await _productService.AddAsync(produtoDto);
 
@@ -59,9 +54,7 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpPost("UploadFileListProducts")]
         [Authorize(Roles = "Admin")]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável pelo upload do arquivo com a lista de produtos (Admin)."
-        )]
+        [SwaggerOperation(Summary = "Endpoint responsável pelo upload do arquivo com a lista de produtos (Admin).")]
         [ProducesResponseType(typeof(Domain.VOs.FormFile), StatusCodes.Status200OK)]
         public async Task<ActionResult> UploadListProducts([FromForm] IFormFile file)
         {
@@ -79,10 +72,8 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável atualizar um produto (Admin)."
-        )]
-        public async Task<ActionResult> Put([FromBody] ProductDTO produtoDto)
+        [SwaggerOperation(Summary = "Endpoint responsável atualizar um produto (Admin).")]
+        public async Task<ActionResult> Put([FromForm] UpdateProductDTO produtoDto)
         {
             await _productService.UpdateAsync(produtoDto);
 
@@ -91,9 +82,7 @@ namespace CleanArchMvc.API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        [SwaggerOperation(
-            Summary = "Endpoint responsável remover um produto (Admin)."
-        )]
+        [SwaggerOperation(Summary = "Endpoint responsável remover um produto (Admin).")]
         public async Task<ActionResult<ProductDTO>> Delete(int id)
         {
             await _productService.RemoveAsync(id);

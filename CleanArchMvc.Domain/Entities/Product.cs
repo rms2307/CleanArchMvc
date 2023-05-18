@@ -11,6 +11,7 @@ namespace CleanArchMvc.Domain.Entities
         public decimal Price { get; private set; }
         public int Stock { get; private set; }
         public string ImageUrl { get; private set; }
+        public string ImageName { get ; private set; }
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
@@ -19,24 +20,24 @@ namespace CleanArchMvc.Domain.Entities
 
         public string ModifiedBy { get; set; }
 
-        public Product(string name, string description, decimal price, int stock, string imageUrl, int categoryId)
+        public Product(string name, string description, decimal price, int stock, string imageUrl, string imageName, int categoryId)
         {
-            ValidateDomain(name, description, price, stock, imageUrl, categoryId);
+            ValidateDomain(name, description, price, stock, imageUrl, imageName, categoryId);
         }
 
-        public Product(int id, string name, string description, decimal price, int stock, string imageUrl, int categoryId)
+        public Product(int id, string name, string description, decimal price, int stock, string imageUrl, string imageName, int categoryId)
         {
             DomainExceptionValidation.When(id <= 0, "Invalid Id value!");
             Id = id;
-            ValidateDomain(name, description, price, stock, imageUrl, categoryId);
+            ValidateDomain(name, description, price, stock, imageUrl, ImageName, categoryId);
         }
 
-        public void Update(string name, string description, decimal price, int stock, string imageUrl, int categoryId)
+        public void Update(string name, string description, decimal price, int stock, string imageUrl, string imageName, int categoryId)
         {
-            ValidateDomain(name, description, price, stock, imageUrl, categoryId);
+            ValidateDomain(name, description, price, stock, imageUrl, imageName, categoryId);
         }
 
-        private void ValidateDomain(string name, string description, decimal price, int stock, string imageUrl, int categoryId)
+        private void ValidateDomain(string name, string description, decimal price, int stock, string imageUrl, string imageName, int categoryId)
         {
             DomainExceptionValidation.When(string.IsNullOrEmpty(name),
                 "Invalid name. Name is required!");
@@ -62,6 +63,7 @@ namespace CleanArchMvc.Domain.Entities
             Price = price;
             Stock = stock;
             ImageUrl = imageUrl;
+            ImageName = imageName;
             CategoryId = categoryId;
         }
 

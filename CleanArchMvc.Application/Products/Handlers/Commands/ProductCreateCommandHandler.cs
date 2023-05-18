@@ -1,4 +1,5 @@
-﻿using CleanArchMvc.Application.Exceptions;
+﻿using CleanArchMvc.Application.DTOs;
+using CleanArchMvc.Application.Exceptions;
 using CleanArchMvc.Application.Interfaces.Repositories;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Products.Commands;
@@ -26,17 +27,18 @@ namespace CleanArchMvc.Application.Products.Handlers.Commands
 
         public async Task<Product> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
         {
-            string imageUrl = await _storageService.UploadFile(request.Image);
+            UploadFileDto uploadResponse = await _storageService.UploadFile(request.Image);
 
             Product product = new(request.Name,
                 request.Description,
                 request.Price,
                 request.Stock,
-                imageUrl,
+                uploadResponse.FileUrl,
+                uploadResponse.FileName,
                 request.CategoryId);
 
             if (product is null)
-                throw new BadRequestException($"Error creating entity");
+                throw new BadRequestException($"Error creating product");
 
             Category category = await _categoryRepository.GetCategoryByIdAsync(request.CategoryId);
             if (category is null)

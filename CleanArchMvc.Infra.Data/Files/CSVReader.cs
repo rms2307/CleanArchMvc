@@ -26,7 +26,8 @@ namespace CleanArchMvc.Infrastructure.Files
                         decimal.Parse(row[2].ToString()),
                         int.Parse(row[3].ToString()),
                         row[4].ToString(),
-                        int.Parse(row[5].ToString()));
+                        row[5].ToString(),
+                        int.Parse(row[6].ToString()));
 
                     products.Add(product);
                 }

@@ -9,9 +9,9 @@ namespace CleanArchMvc.Application.Interfaces.Services
     {
         Task<IEnumerable<ProductDTO>> GetProductsAsync();
         Task<ProductDTO> GetByIdAsync(int? id);
-        Task AddAsync(ProductDTO productDTO);
+        Task AddAsync(CreateProductDTO productDTO);
         Task UploadListProductsAsync(FormFile file);
-        Task UpdateAsync(ProductDTO productDTO);
+        Task UpdateAsync(UpdateProductDTO productDTO);
         Task RemoveAsync(int? id);
     }
 }

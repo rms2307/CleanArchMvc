@@ -40,17 +40,17 @@ namespace CleanArchMvc.Application.Services
             return _mapper.Map<ProductDTO>(getProductByIdQuery);
         }
 
-        public async Task AddAsync(ProductDTO productDTO)
+        public async Task AddAsync(CreateProductDTO productDTO)
         {
-            var productCreateCommand = _mapper.Map<ProductCreateCommand>(productDTO);
+            ProductCreateCommand productCreateCommand = _mapper.Map<ProductCreateCommand>(productDTO);
             await _mediator.Send(productCreateCommand);
         }
 
-        public async Task UpdateAsync(ProductDTO productDTO)
+        public async Task UpdateAsync(UpdateProductDTO productDTO)
         {
             await CanUpdateOrDelete(productDTO.Id);
 
-            var productUpdateCommand = _mapper.Map<ProductUpdateCommand>(productDTO);
+            ProductUpdateCommand productUpdateCommand = _mapper.Map<ProductUpdateCommand>(productDTO);
             await _mediator.Send(productUpdateCommand);
         }
 

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Amazon;
 using System;
 using Amazon.S3.Model;
+using System.Linq;
+using System.Net;
+using CleanArchMvc.Application.DTOs;
 
 namespace CleanArchMvc.Infrastructure.Storage
 {
@@ -22,7 +25,7 @@ namespace CleanArchMvc.Infrastructure.Storage
             _bucketName = _configuration["AwsS3:BucketName"];
         }
 
-        public async Task<string> UploadFile(IFormFile file)
+        public async Task<UploadFileDto> UploadFile(IFormFile file)
         {
             using (AmazonS3Client client = GetClient())
             {
@@ -43,9 +46,50 @@ namespace CleanArchMvc.Infrastructure.Storage
                     TransferUtility fileTransferUtility = new(client);
                     await fileTransferUtility.UploadAsync(uploadRequest);
 
-                    string url = CreateUrl(client, fileName);
+                    return new UploadFileDto
+                    {
+                        FileName = fileName,
+                        FileUrl = CreateUrl(client, fileName)
+                    };
+                }
+            }
+        }
 
-                    return url;
+        public async Task DeleteFile(string fileName)
+        {
+            using (AmazonS3Client client = GetClient())
+            {
+                var request = new DeleteObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = fileName
+                };
+
+                await client.DeleteObjectAsync(request);
+            }
+        }
+
+        public async Task<bool> CheckFileExists(string fileName)
+        {
+            using (AmazonS3Client client = GetClient())
+            {
+                var request = new GetObjectMetadataRequest
+                {
+                    BucketName = _bucketName,
+                    Key = fileName
+                };
+
+                try
+                {
+                    await client.GetObjectMetadataAsync(request);
+                    return true;
+                }
+                catch (AmazonS3Exception ex)
+                {
+                    if (ex.StatusCode == HttpStatusCode.NotFound)
+                        return false;
+
+                    throw;
                 }
             }
         }
@@ -56,7 +100,7 @@ namespace CleanArchMvc.Infrastructure.Storage
             {
                 BucketName = _bucketName,
                 Key = fileName,
-                Expires = DateTime.UtcNow.AddYears(100)
+                Expires = DateTime.UtcNow.AddYears(10)
             };
             return client.GetPreSignedURL(urlRequest);
         }

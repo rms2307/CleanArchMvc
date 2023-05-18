@@ -56,7 +56,8 @@ namespace CleanArchMvc.Infrastructure.Files
                 decimal.Parse(row.ItemArray[2].ToString()),
                 int.Parse(row.ItemArray[3].ToString()),
                 row.ItemArray[4].ToString(),
-                int.Parse(row.ItemArray[5].ToString())
+                row.ItemArray[5].ToString(),
+                int.Parse(row.ItemArray[6].ToString())
             );
         }
     }
