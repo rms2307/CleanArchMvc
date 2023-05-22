@@ -81,7 +81,7 @@ namespace CleanArchMvc.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Endpoint responsável remover um produto (Admin).")]
         public async Task<ActionResult> Delete(int id)
         {

@@ -16,9 +16,7 @@ namespace CleanArchMvc.Application.Annotations
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            IFormFile file = value as IFormFile;
-
-            if (file != null)
+            if (value is IFormFile file)
             {
                 var fileExtension = Path.GetExtension(file.FileName);
 
