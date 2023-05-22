@@ -1,4 +1,6 @@
-﻿using CleanArchMvc.Application.Interfaces.Repositories;
+﻿using CleanArchMvc.Application.DTOs;
+using CleanArchMvc.Application.DTOs.Validations;
+using CleanArchMvc.Application.Interfaces.Repositories;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Application.Mappings;
 using CleanArchMvc.Application.Services;
@@ -8,6 +10,7 @@ using CleanArchMvc.Infrastructure.Identity;
 using CleanArchMvc.Infrastructure.Repositories;
 using CleanArchMvc.Infrastructure.Storage;
 using CleanArchMvc.Infrastructure.Twilio;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,9 +36,16 @@ namespace CleanArchMvc.Infra.IoC
 
             RegisterIdentity(services);
 
+            RegisterValidators(services);
+
             RegisterSMSOptions(services, configuration);
 
             return services;
+        }
+
+        private static void RegisterValidators(IServiceCollection services)
+        {
+            services.AddScoped<IValidator<CreateProductDTO>, CreateProductValidator>();
         }
 
         private static void RegisterSMSOptions(IServiceCollection services, IConfiguration configuration)

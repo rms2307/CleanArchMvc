@@ -1,12 +1,17 @@
+using CleanArchMvc.API.ApiModels.Response;
 using CleanArchMvc.API.Middlewares;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Infra.IoC;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CleanArchMvc.API
 {
@@ -26,7 +31,20 @@ namespace CleanArchMvc.API
             services.AddInfrastructureJWT(Configuration);
             services.AddInfrastructureSwagger();
 
-            services.AddControllers();
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        List<string> errors = context.ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(e => e.ErrorMessage)
+                            .ToList();
+
+                        return new BadRequestObjectResult(new ApiResponse<List<string>>(errors));
+                    };
+                });
+            services.AddFluentValidationAutoValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +63,7 @@ namespace CleanArchMvc.API
             seedUserRoleInitial.SeedUsers();
 
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseHttpsRedirection();            
+            app.UseHttpsRedirection();
             app.UseStatusCodePages();
             app.UseRouting();
             app.UseAuthentication();
