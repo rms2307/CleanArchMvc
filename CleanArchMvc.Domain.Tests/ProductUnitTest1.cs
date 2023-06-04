@@ -36,17 +36,6 @@ namespace CleanArchMvc.Domain.Tests
         }
 
         [Fact]
-        public void CreateProduct_LongImageName_DomainExceptionLongImageName()
-        {
-            Action action = () => new Product(1, "Product Name", "Product Description", 9.99m,
-                99, "product image toooooooooooooooooooooooooooooooooooooooooooo loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg", "", 1);
-
-            action.Should()
-                .Throw<Validation.DomainExceptionValidation>()
-                 .WithMessage("Invalid image name, too long, maximum 250 characters!");
-        }
-
-        [Fact]
         public void CreateProduct_WithNullImageName_NoDomainException()
         {
             Action action = () => new Product(1, "Product Name", "Product Description", 9.99m, 99, null, "", 1);

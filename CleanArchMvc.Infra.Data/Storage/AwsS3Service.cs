@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Amazon;
 using System;
 using Amazon.S3.Model;
-using System.Linq;
 using System.Net;
 using CleanArchMvc.Application.DTOs;
 
