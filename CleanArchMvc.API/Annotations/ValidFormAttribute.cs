@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Web;
 
 namespace CleanArchMvc.API.Annotations
 {
@@ -13,6 +15,8 @@ namespace CleanArchMvc.API.Annotations
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            Sanitize(context);
+
             if (!context.ModelState.IsValid)
             {
                 var errors = GetErrors(context.ModelState);
@@ -31,6 +35,29 @@ namespace CleanArchMvc.API.Annotations
                 errors.AddRange(item.Errors.Select(x => x.ErrorMessage));
 
             return errors;
-        }        
+        }
+
+        private void Sanitize(ActionExecutingContext context)
+        {
+            foreach (var actionArgument in context.ActionArguments)
+            {
+                var obj = actionArgument.Value;
+                Type objectType = obj.GetType();
+                PropertyInfo[] properties = objectType.GetProperties();
+
+                foreach (PropertyInfo property in properties)
+                {
+                    if (property.PropertyType == typeof(string))
+                    {
+                        object value = property.GetValue(obj);
+
+                        HttpUtility.HtmlEncode((string)value);
+                        string sanitizedInput = HttpUtility.HtmlEncode((string)value);
+
+                        property.SetValue(obj, sanitizedInput, null);
+                    }
+                }
+            }
+        }
     }
 }
