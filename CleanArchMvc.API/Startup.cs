@@ -2,6 +2,7 @@ using CleanArchMvc.API.ApiModels.Response;
 using CleanArchMvc.API.Middlewares;
 using CleanArchMvc.Application.Interfaces.Services;
 using CleanArchMvc.Infra.IoC;
+using CleanArchMvc.Infrastructure;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,7 +49,7 @@ namespace CleanArchMvc.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUserRoleInitial seedUserRoleInitial)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUserRoleInitial seedUserRoleInitial, ApplicationDbContext dbContext)
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -59,6 +60,7 @@ namespace CleanArchMvc.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchMvc.API v1"));
             }
 
+            dbContext.Start();
             seedUserRoleInitial.SeedRoles();
             seedUserRoleInitial.SeedUsers();
 

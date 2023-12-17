@@ -51,5 +51,10 @@ namespace CleanArchMvc.Infrastructure
                 }
             }
         }
+
+        public void Start()
+        {
+            Database.Migrate();
+        }
     }
 }
