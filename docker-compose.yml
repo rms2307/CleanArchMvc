@@ -1,8 +1,34 @@
 version: '3.4'
 
 services:
-  cleanarchmvc.api:
-    image: ${DOCKER_REGISTRY-}cleanarchmvcapi
+  db:
+    image: postgres
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo 
+      POSTGRES_PASSWORD: CleanArchDb
+      POSTGRES_USER: CleanArchDb
+      POSTGRES_DB: CleanArchDb
+    ports:
+      - "5432:5432"
+    networks:
+      - clean-arch-mvc-net
+  app:
+    image: clean-arch-mvc-app
+    restart: always
     build:
       context: .
       dockerfile: CleanArchMvc.API/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo    
+    ports:
+      - "5001:80"
+    links:
+      - db
+    depends_on:
+      - db
+    networks:
+      - clean-arch-mvc-net  
+networks:
+    clean-arch-mvc-net:
+        driver: bridge
