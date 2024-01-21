@@ -27,6 +27,10 @@ jobs:
           dotnet restore "$file"
         done
     - name: Build
-      run: dotnet build --no-restore
+      run: |
+        for file in */*.csproj; do
+          echo "Build dependencies for $file"
+          dotnet build "$file"
+        done
     - name: Test
       run: dotnet test --no-build --verbosity normal
