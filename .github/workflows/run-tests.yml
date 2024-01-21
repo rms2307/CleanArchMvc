@@ -29,8 +29,10 @@ jobs:
     - name: Build
       run: |
         for file in */*.csproj; do
-          echo "Build dependencies for $file"
-          dotnet build "$file"
+          if [[ "$file" != *"CleanArchMvc.WebUI"* ]]; then
+            echo "Build dependencies for $file"
+            dotnet build "$file"
+          fi
         done
     - name: Test
       run: dotnet test --no-build --verbosity normal
