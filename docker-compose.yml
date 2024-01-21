@@ -22,7 +22,7 @@ services:
     environment:
       TZ: America/Sao_Paulo    
     ports:
-      - "5001:80"
+      - "80:80"
     links:
       - db
     depends_on:
