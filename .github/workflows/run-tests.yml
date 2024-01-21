@@ -34,5 +34,7 @@ jobs:
             dotnet build "$file"
           fi
         done
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Test Application
+      run: dotnet test CleanArchMvc.Application.Tests/CleanArchMvc.Application.Tests.csproj --no-build --verbosity normal
+    - name: Test Domain
+      run: dotnet test CleanArchMvc.Domain.Tests/CleanArchMvc.Domain.Tests.csproj --no-build --verbosity normal
