@@ -14,7 +14,7 @@ services:
     networks:
       - clean-arch-mvc-net
   app:
-    image: clean-arch-mvc-app
+    image: clean-arch-mvc
     restart: always
     build:
       context: .
